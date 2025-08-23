@@ -1,0 +1,27 @@
+---
+title: "Learning Paths materials"
+format:
+  html:
+    toc: false
+    number-sections: false
+page-layout: full
+---
+
+## Welcome
+
+This site collects small analyses and materials around learning English for IT professionals.
+
+### Highlights
+
+- Explore whether respondents have ever paused learning English: [Stopped learning](stopped_learning.qmd)
+
+### How to reproduce
+
+You can rebuild the data and pages locally:
+
+```bash
+uv run --python 3.12 python -m src.scripts.preprocess
+QUARTO_PYTHON=.venv/bin/python quarto render
+```
+
+
