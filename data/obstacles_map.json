@@ -1,0 +1,322 @@
+[
+  {
+    "respondent_id": 2,
+    "labels": [
+      "Poor teaching or methods",
+      "Loss of motivation",
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 3,
+    "labels": [
+      "Never"
+    ]
+  },
+  {
+    "respondent_id": 4,
+    "labels": [
+      "Loss of motivation",
+      "Poor teaching or methods"
+    ]
+  },
+  {
+    "respondent_id": 5,
+    "labels": [
+      "No practical need",
+      "Lack of time",
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 6,
+    "labels": [
+      "Lack of time"
+    ]
+  },
+  {
+    "respondent_id": 8,
+    "labels": [
+      "Prioritizing another language"
+    ]
+  },
+  {
+    "respondent_id": 9,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 12,
+    "labels": [
+      "Never"
+    ]
+  },
+  {
+    "respondent_id": 13,
+    "labels": [
+      "Lack of time"
+    ]
+  },
+  {
+    "respondent_id": 16,
+    "labels": [
+      "No practical need",
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 17,
+    "labels": [
+      "Lack of progress",
+      "Poor teaching or methods"
+    ]
+  },
+  {
+    "respondent_id": 20,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 23,
+    "labels": [
+      "Prioritizing another language"
+    ]
+  },
+  {
+    "respondent_id": 26,
+    "labels": [
+      "Loss of motivation",
+      "Lack of progress",
+      "Poor teaching or methods"
+    ]
+  },
+  {
+    "respondent_id": 27,
+    "labels": [
+      "Never"
+    ]
+  },
+  {
+    "respondent_id": 28,
+    "labels": [
+      "Loss of motivation",
+      "Lack of progress"
+    ]
+  },
+  {
+    "respondent_id": 32,
+    "labels": [
+      "Loss of motivation",
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 33,
+    "labels": [
+      "Prioritizing another language"
+    ]
+  },
+  {
+    "respondent_id": 34,
+    "labels": [
+      "Lack of time",
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 35,
+    "labels": [
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 37,
+    "labels": [
+      "No practical need",
+      "Poor teaching or methods"
+    ]
+  },
+  {
+    "respondent_id": 38,
+    "labels": [
+      "Poor teaching or methods",
+      "Lack of progress"
+    ]
+  },
+  {
+    "respondent_id": 39,
+    "labels": [
+      "Lack of time",
+      "Lack of progress",
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 40,
+    "labels": [
+      "Lack of time",
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 44,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 45,
+    "labels": [
+      "Lack of a clear goal",
+      "Lack of progress"
+    ]
+  },
+  {
+    "respondent_id": 48,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 54,
+    "labels": [
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 56,
+    "labels": [
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 58,
+    "labels": [
+      "Poor teaching or methods"
+    ]
+  },
+  {
+    "respondent_id": 59,
+    "labels": [
+      "Lack of progress",
+      "Poor teaching or methods"
+    ]
+  },
+  {
+    "respondent_id": 61,
+    "labels": [
+      "Never"
+    ]
+  },
+  {
+    "respondent_id": 63,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 69,
+    "labels": [
+      "Lack of time",
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 73,
+    "labels": [
+      "Poor teaching or methods",
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 76,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 81,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 82,
+    "labels": [
+      "Never"
+    ]
+  },
+  {
+    "respondent_id": 83,
+    "labels": [
+      "Lack of time",
+      "Loss of motivation",
+      "Poor teaching or methods"
+    ]
+  },
+  {
+    "respondent_id": 84,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 86,
+    "labels": [
+      "Lack of progress",
+      "Lack of a clear goal"
+    ]
+  },
+  {
+    "respondent_id": 90,
+    "labels": [
+      "No practical need",
+      "Lack of progress"
+    ]
+  },
+  {
+    "respondent_id": 91,
+    "labels": [
+      "Lack of time"
+    ]
+  },
+  {
+    "respondent_id": 92,
+    "labels": [
+      "Lack of progress"
+    ]
+  },
+  {
+    "respondent_id": 95,
+    "labels": [
+      "Lack of time"
+    ]
+  },
+  {
+    "respondent_id": 96,
+    "labels": [
+      "Lack of time"
+    ]
+  },
+  {
+    "respondent_id": 97,
+    "labels": [
+      "Lack of time",
+      "Loss of motivation"
+    ]
+  },
+  {
+    "respondent_id": 98,
+    "labels": [
+      "No practical need"
+    ]
+  },
+  {
+    "respondent_id": 101,
+    "labels": [
+      "Lack of progress"
+    ]
+  }
+]

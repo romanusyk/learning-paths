@@ -5,3 +5,4 @@ data/form_data_raw.csv
 old_src/
 
 /.quarto/
+.env
