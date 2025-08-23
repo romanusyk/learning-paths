@@ -13,7 +13,7 @@ This site collects small analyses and materials around learning English for IT p
 
 ### Highlights
 
-- Explore whether respondents have ever paused learning English: [Stopped learning](stopped_learning.qmd)
+- Explore whether respondents have ever paused learning English: [Stopped learning](notebooks/stopped_learning.qmd)
 
 ### How to reproduce
 
@@ -23,5 +23,3 @@ You can rebuild the data and pages locally:
 uv run --python 3.12 python -m src.scripts.preprocess
 QUARTO_PYTHON=.venv/bin/python quarto render
 ```
-
-

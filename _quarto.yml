@@ -2,16 +2,13 @@ project:
   type: website
   output-dir: docs
   render:
-    - notebooks/index.qmd
-    - notebooks/stopped_learning.qmd
-  post-render:
-    - bash -lc "mv docs/notebooks/index.html docs/index.html"
+    - index.qmd
+    - notebooks/*
 
 website:
   title: "Learning Paths materials"
-  navbar:
-    left:
-      - href: notebooks/index.qmd
-        text: Home
+  sidebar:
+    style: "docked"
+    contents:
       - href: notebooks/stopped_learning.qmd
-        text: How many responses have ever stopped learning English?
+        text: Stopped learning

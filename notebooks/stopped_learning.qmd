@@ -1,5 +1,5 @@
 ---
-title: "Stopped learning English"
+title: "How many responses have ever stopped learning English?"
 format:
   html:
     toc: true

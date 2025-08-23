@@ -1,0 +1,174 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"How many responses have ever stopped learning English?\"\n",
+        "format:\n",
+        "  html:\n",
+        "    toc: true\n",
+        "    number-sections: false\n",
+        "---\n",
+        "\n",
+        "Based on our survey results, we categorize respondents into three groups:\n",
+        "\n",
+        "- Stopped at least once\n",
+        "- Explicitly never stopped\n",
+        "- No data"
+      ],
+      "id": "c310589d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "import re\n",
+        "\n",
+        "df = pd.read_csv('../data/form_data.csv')\n",
+        "N = len(df)\n",
+        "\n",
+        "text = df['obstacles'] if 'obstacles' in df.columns else pd.Series([None] * N)\n",
+        "\n",
+        "# Basic heuristic: contains 'never' (English) or 'ніколи' (Ukrainian)\n",
+        "never_mask = text.fillna('').astype(str).str.lower().str.contains('never|ніколи')\n",
+        "stopped_mask = text.notna() & text.astype(str).str.strip().ne('') & (~never_mask)\n",
+        "unknown_mask = (~stopped_mask) & (~never_mask)\n",
+        "\n",
+        "count_stopped = int(stopped_mask.sum())\n",
+        "count_never = int(never_mask.sum())\n",
+        "count_unknown = int(unknown_mask.sum())\n",
+        "\n",
+        "count_stopped, count_never, count_unknown, N"
+      ],
+      "id": "2923d15e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Using the current data snapshot, the counts are shown below."
+      ],
+      "id": "37f7ca6e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(f\"Stopped at least once: {count_stopped}\")\n",
+        "print(f\"Explicitly never stopped: {count_never}\")\n",
+        "print(f\"No data: {count_unknown}\")"
+      ],
+      "id": "4fbe5fb8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "In our data, {count_stopped} out of {N} respondents have indicated stopping at least once, and {count_never} respondents stated they have never stopped. The remaining {count_unknown} provided no information.\n",
+        "\n",
+        "### Respondent IDs per group"
+      ],
+      "id": "b8a3d1b7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "ids_stopped = df.loc[stopped_mask, 'respondent_id'].tolist()\n",
+        "ids_never = df.loc[never_mask, 'respondent_id'].tolist()\n",
+        "ids_unknown = df.loc[unknown_mask, 'respondent_id'].tolist()\n",
+        "\n",
+        "print('Stopped IDs:', ids_stopped)\n",
+        "print('Never IDs:', ids_never)\n",
+        "print('No-data IDs:', ids_unknown)"
+      ],
+      "id": "0c72ca5e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Pie chart"
+      ],
+      "id": "e576d0eb"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "labels = ['Stopped', 'Never', 'No data']\n",
+        "sizes = [count_stopped, count_never, count_unknown]\n",
+        "colors = ['#ff9999','#99ff99','#dddddd']\n",
+        "\n",
+        "fig, ax = plt.subplots(figsize=(6, 6))\n",
+        "ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)\n",
+        "ax.axis('equal')\n",
+        "plt.show()"
+      ],
+      "id": "51e5e318",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Examples: respondents who stopped at least once"
+      ],
+      "id": "b73d6a42"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "examples_stopped = df.loc[stopped_mask, 'obstacles'].dropna().astype(str).head(3).tolist()\n",
+        "for ex in examples_stopped:\n",
+        "    print(f\"- \\\"{ex}\\\"\")"
+      ],
+      "id": "94caf248",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Examples: respondents who never stopped"
+      ],
+      "id": "8292ad7d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "examples_never = df.loc[never_mask, 'obstacles'].dropna().astype(str).head(3).tolist()\n",
+        "for ex in examples_never:\n",
+        "    print(f\"- \\\"{ex}\\\"\")"
+      ],
+      "id": "bb377e52",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Users/roman/PycharmProjects/learning-paths/.venv/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
