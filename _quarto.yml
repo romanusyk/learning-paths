@@ -10,5 +10,5 @@ website:
   sidebar:
     style: "docked"
     contents:
-      - href: notebooks/stopped_learning.qmd
-        text: Stopped learning
+      - href: notebooks/obstacles.qmd
+        text: Obstacles

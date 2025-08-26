@@ -13,7 +13,7 @@ This site collects small analyses and materials around learning English for IT p
 
 ### Highlights
 
-- Explore whether respondents have ever paused learning English: [Stopped learning](notebooks/stopped_learning.qmd)
+- Explore whether respondents have ever paused learning English: [Obstacles](notebooks/obstacles.qmd)
 
 ### How to reproduce
 

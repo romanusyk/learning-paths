@@ -3,7 +3,7 @@ import json
 import os
 from typing import Any, Optional, Dict
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import google.generativeai as genai
 
 
@@ -23,7 +23,8 @@ def generate_gemini(
     - temperature: optional sampling temperature
     """
 
-    load_dotenv()
+    # Load .env from current or parent directories
+    load_dotenv(find_dotenv())
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set. Add it to your environment or .env file.")
