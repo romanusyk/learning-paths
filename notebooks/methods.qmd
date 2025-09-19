@@ -1,0 +1,462 @@
+---
+title: "Learning Methods Analysis"
+format:
+  html:
+    toc: false
+    number-sections: false
+    code-fold: true
+    page-layout: full
+---
+
+This page gives an overview the learning methods included to the survey. Our respondents rated the effectiveness and engagement of each of them on a scale of 1 to 5. Additionally, we asked them to mention additional learning methods they use.
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from collections import Counter
+
+df = pd.read_csv('../data/form_data.csv')
+
+# Method effectiveness columns
+effectiveness_cols = [
+    'method_effectiveness:online_courses',
+    'method_effectiveness:private_lessons', 
+    'method_effectiveness:textbooks',
+    'method_effectiveness:watching_movies',
+    'method_effectiveness:audio',
+    'method_effectiveness:speaking_club',
+    'method_effectiveness:reading_books',
+    'method_effectiveness:work_tasks'
+]
+
+# Engagement/motivation columns
+engagement_cols = [
+    'motives:online_exercises',
+    'motives:speaking_club',
+    'motives:watching_movies', 
+    'motives:reading_books',
+    'motives:work_tasks',
+    'motives:gamified_learning',
+    'motives:personalised_feedback'
+]
+
+# Clean method names for display
+def clean_method_name(col_name):
+    if col_name.startswith('method_effectiveness:'):
+        return col_name.replace('method_effectiveness:', '').replace('_', ' ').title()
+    elif col_name.startswith('motives:'):
+        return col_name.replace('motives:', '').replace('_', ' ').title()
+    return col_name
+
+print(f"Total respondents: {len(df)}")
+```
+
+## Method Effectiveness
+
+Distribution of effectiveness ratings (1-5 scale) for each learning method. Respondents rated how effective they found each method:
+
+- **Online Courses**: Structured online learning programs and platforms
+- **Private Lessons**: One-on-one tutoring with individual instructors  
+- **Textbooks**: Traditional printed or digital learning materials
+- **Watching Movies**: Learning through English-language films and TV shows
+- **Audio**: Podcasts, music, and other audio content in English
+- **Speaking Club**: Group conversation practice sessions
+- **Reading Books**: Literature, articles, and other written content in English
+- **Work Tasks**: Learning English through professional activities and job requirements
+
+```{python}
+# Create combined effectiveness distribution visualization
+# Define colors for each rating (1-5)
+rating_colors = {1: '#FF4B4B', 2: '#FF8C42', 3: '#FFD23F', 4: '#8FBC8F', 5: '#32CD32'}
+
+# Prepare data for all methods and calculate average effectiveness for sorting
+method_data_eff = []
+
+for col in effectiveness_cols:
+    method_name = clean_method_name(col)
+    
+    # Get non-null values and convert to numeric
+    values = pd.to_numeric(df[col], errors='coerce').dropna()
+    
+    if len(values) == 0:
+        # Fill with zeros if no data
+        percentages = {rating: 0 for rating in range(1, 6)}
+        avg_effectiveness = 0
+    else:
+        # Calculate percentage distribution
+        value_counts = values.value_counts().sort_index()
+        total = len(values)
+        
+        # Fill percentages for each rating (1-5)
+        percentages = {}
+        for rating in range(1, 6):
+            pct = round(value_counts.get(rating, 0) / total * 100, 1) if total > 0 else 0
+            percentages[rating] = pct
+        
+        # Calculate average effectiveness for sorting
+        avg_effectiveness = values.mean()
+    
+    method_data_eff.append({
+        'name': method_name,
+        'percentages': percentages,
+        'avg_effectiveness': avg_effectiveness
+    })
+
+# Sort by average effectiveness (descending)
+method_data_eff.sort(key=lambda x: x['avg_effectiveness'], reverse=True)
+
+# Extract sorted data
+method_names_eff = [item['name'] for item in method_data_eff]
+all_percentages = {rating: [item['percentages'][rating] for item in method_data_eff] for rating in range(1, 6)}
+
+# Create the combined horizontal bar chart
+fig, ax = plt.subplots(figsize=(12, 10))
+
+y_pos = np.arange(len(method_names_eff))
+bar_height = 0.15
+spacing = 0.02
+
+# Create bars for each rating
+for i, rating in enumerate(range(1, 6)):
+    y_positions = y_pos + (i - 2) * (bar_height + spacing)
+    bars = ax.barh(y_positions, all_percentages[rating], bar_height, 
+                   label=f'Rating {rating}', color=rating_colors[rating], alpha=0.8)
+    
+    # Add percentage labels on bars (only if percentage > 2% to avoid clutter)
+    for bar, pct in zip(bars, all_percentages[rating]):
+        if pct > 2:
+            width = bar.get_width()
+            ax.text(width + 0.5, bar.get_y() + bar.get_height()/2.,
+                    f'{pct}%', ha='left', va='center', fontsize=9)
+
+ax.set_yticks(y_pos)
+ax.set_yticklabels(method_names_eff, fontsize=12)
+ax.set_xlabel('Percentage', fontsize=13)
+ax.set_title('Method Effectiveness Rating Distribution', fontsize=16, fontweight='bold', pad=20)
+ax.legend(loc='lower right', fontsize=11)
+ax.grid(axis='x', alpha=0.3)
+ax.tick_params(axis='x', labelsize=11)
+ax.set_xlim(0, max([max(all_percentages[r]) for r in range(1, 6)]) * 1.1)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Method Engagement
+
+Distribution of engagement/motivation ratings (1-5 scale) for different learning aspects. Respondents rated how motivated and engaged they felt with each approach:
+
+- **Online Exercises**: Interactive digital activities and practice tasks
+- **Speaking Club**: Group conversation and discussion sessions  
+- **Watching Movies**: Engaging with English-language films and TV content
+- **Reading Books**: Enjoying literature and written materials in English
+- **Work Tasks**: Professional activities that require English skills
+- **Gamified Learning**: Game-like learning experiences with rewards and progression
+- **Personalised Feedback**: Individual assessment and customized guidance
+
+```{python}
+# Create combined engagement distribution visualization
+# Prepare data for all engagement methods and calculate average for sorting
+method_data_eng = []
+
+for col in engagement_cols:
+    method_name = clean_method_name(col)
+    
+    # Get non-null values and convert to numeric
+    values = pd.to_numeric(df[col], errors='coerce').dropna()
+    
+    if len(values) == 0:
+        # Fill with zeros if no data
+        percentages = {rating: 0 for rating in range(1, 6)}
+        avg_engagement = 0
+    else:
+        # Calculate percentage distribution
+        value_counts = values.value_counts().sort_index()
+        total = len(values)
+        
+        # Fill percentages for each rating (1-5)
+        percentages = {}
+        for rating in range(1, 6):
+            pct = round(value_counts.get(rating, 0) / total * 100, 1) if total > 0 else 0
+            percentages[rating] = pct
+        
+        # Calculate average engagement for sorting
+        avg_engagement = values.mean()
+    
+    method_data_eng.append({
+        'name': method_name,
+        'percentages': percentages,
+        'avg_engagement': avg_engagement
+    })
+
+# Sort by average engagement (descending)
+method_data_eng.sort(key=lambda x: x['avg_engagement'], reverse=True)
+
+# Extract sorted data
+method_names_eng = [item['name'] for item in method_data_eng]
+all_percentages_eng = {rating: [item['percentages'][rating] for item in method_data_eng] for rating in range(1, 6)}
+
+# Create the combined horizontal bar chart
+fig, ax = plt.subplots(figsize=(12, 9))
+
+y_pos = np.arange(len(method_names_eng))
+bar_height = 0.15
+spacing = 0.02
+
+# Create bars for each rating
+for i, rating in enumerate(range(1, 6)):
+    y_positions = y_pos + (i - 2) * (bar_height + spacing)
+    bars = ax.barh(y_positions, all_percentages_eng[rating], bar_height, 
+                   label=f'Rating {rating}', color=rating_colors[rating], alpha=0.8)
+    
+    # Add percentage labels on bars (only if percentage > 2% to avoid clutter)
+    for bar, pct in zip(bars, all_percentages_eng[rating]):
+        if pct > 2:
+            width = bar.get_width()
+            ax.text(width + 0.5, bar.get_y() + bar.get_height()/2.,
+                    f'{pct}%', ha='left', va='center', fontsize=9)
+
+ax.set_yticks(y_pos)
+ax.set_yticklabels(method_names_eng, fontsize=12)
+ax.set_xlabel('Percentage', fontsize=13)
+ax.set_title('Method Engagement Rating Distribution', fontsize=16, fontweight='bold', pad=20)
+ax.legend(loc='lower right', fontsize=11)
+ax.grid(axis='x', alpha=0.3)
+ax.tick_params(axis='x', labelsize=11)
+ax.set_xlim(0, max([max(all_percentages_eng[r]) for r in range(1, 6)]) * 1.1)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Combined Effectiveness vs Engagement
+
+Average effectiveness and engagement ratings for methods, shown side by side:
+
+```{python}
+# Calculate averages for methods that appear in both effectiveness and engagement
+# Map similar methods between the two categories
+all_methods = {
+    'Speaking clubs': (['method_effectiveness:speaking_club'], ['motives:speaking_club']),
+    'Movies & Music': (['method_effectiveness:watching_movies', 'method_effectiveness:audio'], ['motives:watching_movies']),
+    'Books': (['method_effectiveness:reading_books', 'method_effectiveness:textbooks'], ['motives:reading_books']),
+    'Practice at work': (['method_effectiveness:work_tasks'], ['motives:work_tasks']),
+    'Online drills': (['method_effectiveness:online_courses'], ['motives:online_exercises', 'motives:gamified_learning']),
+    'Private lessons': (['method_effectiveness:private_lessons'], ['motives:personalised_feedback']),
+}
+
+# Prepare data for combined chart and calculate averages for sorting
+combined_method_data = []
+
+for method_name, (eff_cols, eng_cols) in all_methods.items():
+    # Calculate effectiveness average - stack all values from all effectiveness columns
+    all_eff_values = []
+    for eff_col in eff_cols:
+        eff_values = pd.to_numeric(df[eff_col], errors='coerce').dropna()
+        all_eff_values.extend(eff_values.tolist())
+    eff_avg = np.mean(all_eff_values) if all_eff_values else np.nan
+    
+    # Calculate engagement average - stack all values from all engagement columns
+    all_eng_values = []
+    for eng_col in eng_cols:
+        eng_values = pd.to_numeric(df[eng_col], errors='coerce').dropna()
+        all_eng_values.extend(eng_values.tolist())
+    eng_avg = np.mean(all_eng_values) if all_eng_values else np.nan
+    
+    # Use effectiveness for sorting, fall back to engagement if effectiveness is missing
+    sort_score = eff_avg if not np.isnan(eff_avg) else (eng_avg if not np.isnan(eng_avg) else 0)
+    
+    combined_method_data.append({
+        'name': method_name,
+        'effectiveness': eff_avg,
+        'engagement': eng_avg,
+        'sort_score': sort_score
+    })
+
+# Sort by effectiveness (or engagement where effectiveness is missing), descending
+combined_method_data.sort(key=lambda x: x['sort_score'], reverse=True)
+
+# Extract sorted data
+method_names = [item['name'] for item in combined_method_data]
+effectiveness_scores = [item['effectiveness'] for item in combined_method_data]
+engagement_scores = [item['engagement'] for item in combined_method_data]
+
+# Create horizontal side-by-side bar chart
+y = np.arange(len(method_names))
+height = 0.28
+
+# Set modern, friendly font
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
+
+fig, ax = plt.subplots(figsize=(11, 6))
+
+# Create horizontal bars with vibrant, friendly colors
+bars1 = ax.barh(y + height/2, effectiveness_scores, height, label='Effectiveness', 
+                color='#3498db', alpha=0.9, edgecolor='white', linewidth=0.5)
+bars2 = ax.barh(y - height/2, engagement_scores, height, label='Engagement', 
+                color='#e74c3c', alpha=0.9, edgecolor='white', linewidth=0.5)
+
+# Add value labels on bars with better styling
+for i, (bar1, bar2) in enumerate(zip(bars1, bars2)):
+    if not np.isnan(effectiveness_scores[i]):
+        width1 = bar1.get_width()
+        ax.text(width1 + 0.1, bar1.get_y() + bar1.get_height()/2.,
+                f'{effectiveness_scores[i]:.1f}', ha='left', va='center', 
+                fontsize=11, fontweight='bold', color='#2c3e50')
+    
+    if not np.isnan(engagement_scores[i]):
+        width2 = bar2.get_width()
+        ax.text(width2 + 0.1, bar2.get_y() + bar2.get_height()/2.,
+                f'{engagement_scores[i]:.1f}', ha='left', va='center', 
+                fontsize=11, fontweight='bold', color='#2c3e50')
+
+# Modern, accessible styling
+ax.set_xlabel('Rating (1 = Poor, 5 = Excellent)', fontsize=13, fontweight='600', color='#2c3e50')
+ax.set_title('Which Learning Method Work Best?', 
+             fontweight='bold', fontsize=16, color='#2c3e50', pad=20)
+ax.set_yticks(y)
+ax.set_yticklabels(method_names, fontsize=12, fontweight='500', color='#34495e')
+
+# Clean, modern styling
+ax.set_xticks([1, 2, 3, 4, 5])
+ax.set_xticklabels(['1', '2', '3', '4', '5'], fontsize=11, color='#7f8c8d')
+ax.legend(fontsize=12, loc='upper right', frameon=True, fancybox=True, 
+          shadow=True, framealpha=0.9, facecolor='white')
+ax.grid(axis='x', alpha=0.3, linestyle='--', linewidth=0.8, color='#bdc3c7')
+ax.set_xlim(0.8, 5.2)
+
+# Modern, clean borders
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_color('#bdc3c7')
+ax.spines['left'].set_color('#bdc3c7')
+ax.spines['bottom'].set_linewidth(1.2)
+ax.spines['left'].set_linewidth(1.2)
+
+# Add subtle background color
+ax.set_facecolor('#f8f9fa')
+
+plt.tight_layout()
+plt.show()
+
+# Reset font settings to default after the chart
+plt.rcParams.update(plt.rcParamsDefault)
+```
+
+### Interactive: Extra Learning Methods
+
+The table below shows additional learning methods mentioned by respondents in their free-text responses. Use the language toggle to switch between original and English translations.
+
+```{python}
+#| echo: false
+#| results: asis
+import sys, os
+from IPython.display import HTML, display
+sys.path.append(os.path.abspath('..'))
+
+# Create a simple table for extra methods (similar to obstacles table but without filters)
+extra_methods_df = pd.read_csv('../data/extra_methods_eng.csv')
+
+def render_extra_methods_table():
+    # Build HTML for language toggle and table
+    lang_toggle = '''
+    <div style="margin-bottom: 1rem;" class="toolbar">
+        <strong>Text language:</strong> 
+        <button id="lang-original-methods" class="lang-toggle-btn active" data-lang="orig">Original</button> 
+        <button id="lang-english-methods" class="lang-toggle-btn" data-lang="en">English</button>
+    </div>
+    '''
+    
+    # Build table rows
+    table_rows = []
+    for _, row in extra_methods_df.iterrows():
+        orig_text = str(row.get('extra_methods', '') or '').strip()
+        eng_text = str(row.get('extra_methods_eng', '') or '').strip()
+        
+        if not orig_text and not eng_text:
+            continue
+            
+        # Get original text from form_data if available
+        respondent_id = row.get('respondent_id')
+        if pd.notna(respondent_id):
+            form_row = df[df['respondent_id'] == respondent_id]
+            if not form_row.empty:
+                orig_from_form = str(form_row.iloc[0].get('extra_methods', '') or '').strip()
+                if orig_from_form:
+                    orig_text = orig_from_form
+        
+        cell_content = f'''
+        <span class="methods-text">
+            <span class="text-orig">{orig_text or '—'}</span>
+            <span class="text-en" style="display:none">{eng_text or '—'}</span>
+        </span>
+        '''
+        
+        table_rows.append(f'<tr><td>{cell_content}</td></tr>')
+    
+    table_html = f'''
+    <table id="extra-methods-table" class="methods-table">
+        <thead><tr><th>Additional Learning Methods</th></tr></thead>
+        <tbody>{''.join(table_rows)}</tbody>
+    </table>
+    '''
+    
+    # CSS styling
+    css = '''
+    <style>
+        .lang-toggle-btn { 
+            cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; 
+            border-radius: 6px; border: 1px solid #bbb; background: #fafafa; 
+        }
+        .lang-toggle-btn.active { background: #333; color: #fff; border-color: #333; }
+        .methods-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .methods-table thead th { 
+            text-align: left; border-bottom: 2px solid #ddd; padding: 8px; 
+        }
+        .methods-table td { 
+            vertical-align: top; padding: 8px; border-bottom: 1px solid #eee; 
+        }
+    </style>
+    '''
+    
+    # JavaScript for language toggle
+    script = '''
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function setMethodsLang(lang) {
+            document.querySelectorAll('.methods-text .text-en').forEach(function(el) { 
+                el.style.display = (lang==='en') ? '' : 'none'; 
+            });
+            document.querySelectorAll('.methods-text .text-orig').forEach(function(el) { 
+                el.style.display = (lang==='en') ? 'none' : ''; 
+            });
+        }
+        
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'lang-original-methods') {
+                document.querySelectorAll('.lang-toggle-btn').forEach(function(b) { 
+                    b.classList.remove('active'); 
+                });
+                e.target.classList.add('active');
+                setMethodsLang('orig');
+            } else if (e.target && e.target.id === 'lang-english-methods') {
+                document.querySelectorAll('.lang-toggle-btn').forEach(function(b) { 
+                    b.classList.remove('active'); 
+                });
+                e.target.classList.add('active');
+                setMethodsLang('en');
+            }
+        });
+        
+        setMethodsLang('orig');
+    });
+    </script>
+    '''
+    
+    return css + lang_toggle + table_html + script
+
+html_block = render_extra_methods_table()
+display(HTML(html_block))
+```

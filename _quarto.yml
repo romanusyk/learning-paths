@@ -12,3 +12,5 @@ website:
     contents:
       - href: notebooks/obstacles.qmd
         text: Obstacles
+      - href: notebooks/methods.qmd
+        text: Learning Methods
