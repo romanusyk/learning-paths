@@ -13,6 +13,7 @@ We provide a comprehensive overview of obstacles to learning English based on su
 import pandas as pd
 import json
 from collections import Counter, defaultdict
+import matplotlib.pyplot as plt
 
 df = pd.read_csv('../data/form_data.csv')
 obs_df = pd.read_csv('../data/obstacles.csv')
@@ -30,15 +31,28 @@ count_never = label_counts.get('Never', 0)
 count_stopped = total_with_answer - count_never
 count_unknown = len(df) - total_with_answer
 
-count_stopped, count_never, count_unknown, len(df)
-```
+# Create pie chart for learning status distribution
+labels = ['Stopped at least once', 'Never stopped', 'No data']
+sizes = [count_stopped, count_never, count_unknown]
+colors = ['#ff7f7f', '#90ee90', '#d3d3d3']
 
-### Overview
+fig, ax = plt.subplots(figsize=(8, 6))
+wedges, texts, autotexts = ax.pie(sizes, labels=labels, colors=colors, autopct='%1.0f', 
+                                  startangle=90, textprops={'fontsize': 10})
 
-```{python}
-print(f"Stopped at least once (among those who answered): {count_stopped}")
-print(f"Explicitly never stopped (among those who answered): {count_never}")
-print(f"No data (did not answer the question): {count_unknown}")
+# Make the percentage text bold
+for autotext in autotexts:
+    autotext.set_weight('bold')
+    autotext.set_color('white')
+
+ax.set_title('Learning English Status Distribution', fontsize=14, fontweight='bold', pad=20)
+
+# Add legend with counts
+legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
+ax.legend(wedges, legend_labels, loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+
+plt.tight_layout()
+plt.show()
 ```
 
 ### Obstacles by popularity
@@ -53,7 +67,7 @@ ranked = sorted(obstacle_counts.items(), key=lambda kv: kv[1], reverse=True)
 fig, ax = plt.subplots(figsize=(9, max(3, len(ranked)*0.4)))
 ax.barh([k for k, _ in reversed(ranked)], [v for _, v in reversed(ranked)], color='#5B8FF9')
 ax.set_xlabel('Number of respondents')
-ax.set_title('Obstacles by popularity')
+ax.set_title('Obstacles byr popularity')
 plt.tight_layout()
 plt.show()
 ```

@@ -159,8 +159,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#obstacles-by-popularity" id="toc-obstacles-by-popularity" class="nav-link" data-scroll-target="#obstacles-by-popularity">Obstacles by popularity</a></li>
+  <li><a href="#obstacles-by-popularity" id="toc-obstacles-by-popularity" class="nav-link active" data-scroll-target="#obstacles-by-popularity">Obstacles by popularity</a></li>
   <li><a href="#interactive-all-examples-with-english-translations" id="toc-interactive-all-examples-with-english-translations" class="nav-link" data-scroll-target="#interactive-all-examples-with-english-translations">Interactive: All examples with English translations</a></li>
   </ul>
 </nav>
@@ -188,92 +187,102 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>We provide a comprehensive overview of obstacles to learning English based on survey data and derived mappings.</p>
-<div id="ea9d4e10" class="cell" data-execution_count="1">
+<div id="9f11097e" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter, defaultdict</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'../data/form_data.csv'</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>obs_df <span class="op">=</span> pd.read_csv(<span class="st">'../data/obstacles.csv'</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'../data/obstacles_map.json'</span>, <span class="st">'r'</span>, encoding<span class="op">=</span><span class="st">'utf-8'</span>) <span class="im">as</span> f:</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    mapping <span class="op">=</span> json.load(f)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Build frequency of labels</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>label_counts <span class="op">=</span> Counter()</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> mapping:</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> row.get(<span class="st">'labels'</span>, []):</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        label_counts[label] <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>total_with_answer <span class="op">=</span> <span class="bu">len</span>({row[<span class="st">'respondent_id'</span>] <span class="cf">for</span> row <span class="kw">in</span> mapping})</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>count_never <span class="op">=</span> label_counts.get(<span class="st">'Never'</span>, <span class="dv">0</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>count_stopped <span class="op">=</span> total_with_answer <span class="op">-</span> count_never</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>count_unknown <span class="op">=</span> <span class="bu">len</span>(df) <span class="op">-</span> total_with_answer</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>count_stopped, count_never, count_unknown, <span class="bu">len</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>(44, 5, 53, 102)</code></pre>
-</div>
-</div>
-<section id="overview" class="level3">
-<h3 class="anchored" data-anchor-id="overview">Overview</h3>
-<div id="152bc91c" class="cell" data-execution_count="2">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Stopped at least once (among those who answered): </span><span class="sc">{</span>count_stopped<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Explicitly never stopped (among those who answered): </span><span class="sc">{</span>count_never<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"No data (did not answer the question): </span><span class="sc">{</span>count_unknown<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Stopped at least once (among those who answered): 44
-Explicitly never stopped (among those who answered): 5
-No data (did not answer the question): 53</code></pre>
-</div>
-</div>
-</section>
-<section id="obstacles-by-popularity" class="level3">
-<h3 class="anchored" data-anchor-id="obstacles-by-popularity">Obstacles by popularity</h3>
-<div id="5d010fb7" class="cell" data-execution_count="3">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude 'Never' from ranking of obstacles</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>obstacle_counts <span class="op">=</span> {k: v <span class="cf">for</span> k, v <span class="kw">in</span> label_counts.items() <span class="cf">if</span> k <span class="op">!=</span> <span class="st">'Never'</span>}</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> <span class="bu">sorted</span>(obstacle_counts.items(), key<span class="op">=</span><span class="kw">lambda</span> kv: kv[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="bu">max</span>(<span class="dv">3</span>, <span class="bu">len</span>(ranked)<span class="op">*</span><span class="fl">0.4</span>)))</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>ax.barh([k <span class="cf">for</span> k, _ <span class="kw">in</span> <span class="bu">reversed</span>(ranked)], [v <span class="cf">for</span> _, v <span class="kw">in</span> <span class="bu">reversed</span>(ranked)], color<span class="op">=</span><span class="st">'#5B8FF9'</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Number of respondents'</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Obstacles by popularity'</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'../data/form_data.csv'</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>obs_df <span class="op">=</span> pd.read_csv(<span class="st">'../data/obstacles.csv'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'../data/obstacles_map.json'</span>, <span class="st">'r'</span>, encoding<span class="op">=</span><span class="st">'utf-8'</span>) <span class="im">as</span> f:</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    mapping <span class="op">=</span> json.load(f)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Build frequency of labels</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>label_counts <span class="op">=</span> Counter()</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> mapping:</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> row.get(<span class="st">'labels'</span>, []):</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        label_counts[label] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>total_with_answer <span class="op">=</span> <span class="bu">len</span>({row[<span class="st">'respondent_id'</span>] <span class="cf">for</span> row <span class="kw">in</span> mapping})</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>count_never <span class="op">=</span> label_counts.get(<span class="st">'Never'</span>, <span class="dv">0</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>count_stopped <span class="op">=</span> total_with_answer <span class="op">-</span> count_never</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>count_unknown <span class="op">=</span> <span class="bu">len</span>(df) <span class="op">-</span> total_with_answer</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Create pie chart for learning status distribution</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [<span class="st">'Stopped at least once'</span>, <span class="st">'Never stopped'</span>, <span class="st">'No data'</span>]</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>sizes <span class="op">=</span> [count_stopped, count_never, count_unknown]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'#ff7f7f'</span>, <span class="st">'#90ee90'</span>, <span class="st">'#d3d3d3'</span>]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>wedges, texts, autotexts <span class="op">=</span> ax.pie(sizes, labels<span class="op">=</span>labels, colors<span class="op">=</span>colors, autopct<span class="op">=</span><span class="st">'%1.0f'</span>, </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                                  startangle<span class="op">=</span><span class="dv">90</span>, textprops<span class="op">=</span>{<span class="st">'fontsize'</span>: <span class="dv">10</span>})</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the percentage text bold</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> autotext <span class="kw">in</span> autotexts:</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    autotext.set_weight(<span class="st">'bold'</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    autotext.set_color(<span class="st">'white'</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Learning English Status Distribution'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Add legend with counts</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>legend_labels <span class="op">=</span> [<span class="ss">f'</span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>size<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> label, size <span class="kw">in</span> <span class="bu">zip</span>(labels, sizes)]</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>ax.legend(wedges, legend_labels, loc<span class="op">=</span><span class="st">"center left"</span>, bbox_to_anchor<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>))</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="obstacles_files/figure-html/cell-4-output-1.png" width="852" height="278" class="figure-img"></p>
+<p><img src="obstacles_files/figure-html/cell-2-output-1.png" width="861" height="566" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<div id="5640d6a5" class="cell" data-execution_count="4">
+<section id="obstacles-by-popularity" class="level3">
+<h3 class="anchored" data-anchor-id="obstacles-by-popularity">Obstacles by popularity</h3>
+<div id="9d36fcd9" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the ordered table with explanations (show full text, no truncation, no index column)</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>explain_map <span class="op">=</span> {r[<span class="st">'obstacle'</span>]: r.get(<span class="st">'explanation'</span>, <span class="st">''</span>) <span class="cf">for</span> r <span class="kw">in</span> obs_df.to_dict(orient<span class="op">=</span><span class="st">'records'</span>)}</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> [</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'obstacle'</span>: name, <span class="st">'count'</span>: cnt, <span class="st">'explanation'</span>: explain_map.get(name, <span class="st">''</span>)}</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, cnt <span class="kw">in</span> ranked</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>table_df <span class="op">=</span> pd.DataFrame(rows)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pd.option_context(<span class="st">'display.max_colwidth'</span>, <span class="va">None</span>):</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    html <span class="op">=</span> table_df.to_html(index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    display(HTML(html))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude 'Never' from ranking of obstacles</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>obstacle_counts <span class="op">=</span> {k: v <span class="cf">for</span> k, v <span class="kw">in</span> label_counts.items() <span class="cf">if</span> k <span class="op">!=</span> <span class="st">'Never'</span>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> <span class="bu">sorted</span>(obstacle_counts.items(), key<span class="op">=</span><span class="kw">lambda</span> kv: kv[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="bu">max</span>(<span class="dv">3</span>, <span class="bu">len</span>(ranked)<span class="op">*</span><span class="fl">0.4</span>)))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>ax.barh([k <span class="cf">for</span> k, _ <span class="kw">in</span> <span class="bu">reversed</span>(ranked)], [v <span class="cf">for</span> _, v <span class="kw">in</span> <span class="bu">reversed</span>(ranked)], color<span class="op">=</span><span class="st">'#5B8FF9'</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Number of respondents'</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Obstacles byr popularity'</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="obstacles_files/figure-html/cell-3-output-1.png" width="852" height="278" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="8fb1458f" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the ordered table with explanations (show full text, no truncation, no index column)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>explain_map <span class="op">=</span> {r[<span class="st">'obstacle'</span>]: r.get(<span class="st">'explanation'</span>, <span class="st">''</span>) <span class="cf">for</span> r <span class="kw">in</span> obs_df.to_dict(orient<span class="op">=</span><span class="st">'records'</span>)}</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> [</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'obstacle'</span>: name, <span class="st">'count'</span>: cnt, <span class="st">'explanation'</span>: explain_map.get(name, <span class="st">''</span>)}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, cnt <span class="kw">in</span> ranked</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>table_df <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pd.option_context(<span class="st">'display.max_colwidth'</span>, <span class="va">None</span>):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    html <span class="op">=</span> table_df.to_html(index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    display(HTML(html))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
@@ -328,11 +337,17 @@ No data (did not answer the question): 53</code></pre>
 <section id="interactive-all-examples-with-english-translations" class="level3">
 <h3 class="anchored" data-anchor-id="interactive-all-examples-with-english-translations">Interactive: All examples with English translations</h3>
 <p>The table below lists every respondent’s free-text obstacle answer alongside the set of mapped obstacles (labels). Use the buttons to filter by obstacle label and toggle between original and English text.</p>
-<div id="24bd8d7c" class="cell" data-results="asis" data-execution_count="5">
+<div id="21f85cf5" class="cell" data-results="asis" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <style>
   .tag-filter-btn { cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; border-radius: 18px; background: #eee; border: 1px solid #ddd; }
   .tag-filter-btn.active { outline: 2px solid #222; }
+  .school-filter-btn { cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; border-radius: 18px; background: #eee; border: 1px solid #ddd; }
+  .school-filter-btn.active { outline: 2px solid #222; }
+  .school-filter-btn[data-school="negative"] { background-color: #ffb3b3; color: #000; border: 1px solid #ff6666; }
+  .school-filter-btn[data-school="positive"] { background-color: #b3ffb3; color: #000; border: 1px solid #66ff66; }
+  .school-filter-btn[data-school="negative"].active { outline: 2px solid #cc0000; }
+  .school-filter-btn[data-school="positive"].active { outline: 2px solid #009900; }
   .lang-toggle-btn { cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; border-radius: 6px; border: 1px solid #bbb; background: #fafafa; }
   .lang-toggle-btn.active { background: #333; color: #fff; border-color: #333; }
   .tag-pill { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.9em; margin: 2px 4px 2px 0; white-space: nowrap; }
@@ -362,15 +377,17 @@ No data (did not answer the question): 53</code></pre>
 .tag-filter-btn.tag-prioritizing-another-language.active { box-shadow: 0 0 0 2px rgba(0,0,0,0.15) inset; }
 .tag-pill.tag-lack-of-a-clear-goal { background-color: hsl(315 70% 42%); color: #fff; }
 .tag-filter-btn.tag-lack-of-a-clear-goal { background-color: hsl(315 70% 42%); color: #fff; border: none; }
-.tag-filter-btn.tag-lack-of-a-clear-goal.active { box-shadow: 0 0 0 2px rgba(0,0,0,0.15) inset; }</style><div style="margin-bottom: 0.5rem;" class="toolbar"><strong>Filter by obstacle:</strong> <button class="tag-filter-btn active" data-tag="">All</button>
-<button class="tag-filter-btn tag-no-practical-need" data-tag="No practical need">No practical need <span style="opacity:0.85">(17)</span></button>
-<button class="tag-filter-btn tag-loss-of-motivation" data-tag="Loss of motivation">Loss of motivation <span style="opacity:0.85">(15)</span></button>
-<button class="tag-filter-btn tag-lack-of-time" data-tag="Lack of time">Lack of time <span style="opacity:0.85">(12)</span></button>
-<button class="tag-filter-btn tag-lack-of-progress" data-tag="Lack of progress">Lack of progress <span style="opacity:0.85">(11)</span></button>
-<button class="tag-filter-btn tag-poor-teaching-or-methods" data-tag="Poor teaching or methods">Poor teaching or methods <span style="opacity:0.85">(10)</span></button>
-<button class="tag-filter-btn tag-never" data-tag="Never">Never <span style="opacity:0.85">(5)</span></button>
-<button class="tag-filter-btn tag-prioritizing-another-language" data-tag="Prioritizing another language">Prioritizing another language <span style="opacity:0.85">(3)</span></button>
-<button class="tag-filter-btn tag-lack-of-a-clear-goal" data-tag="Lack of a clear goal">Lack of a clear goal <span style="opacity:0.85">(2)</span></button></div><div style="margin-top: 0.5rem; margin-bottom: 0.5rem;" class="toolbar"><strong>Text language:</strong> <button id="lang-original" class="lang-toggle-btn active" data-lang="orig">Original</button> <button id="lang-english" class="lang-toggle-btn" data-lang="en">English</button></div>
+.tag-filter-btn.tag-lack-of-a-clear-goal.active { box-shadow: 0 0 0 2px rgba(0,0,0,0.15) inset; }</style><div style="margin-bottom: 0.5rem;" class="toolbar"><strong>Filter by obstacle:</strong> <button class="tag-filter-btn active" data-tag="">All <span class="count-all-tags" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-no-practical-need" data-tag="No practical need">No practical need <span class="count-tag-no-practical-need" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-loss-of-motivation" data-tag="Loss of motivation">Loss of motivation <span class="count-tag-loss-of-motivation" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-lack-of-time" data-tag="Lack of time">Lack of time <span class="count-tag-lack-of-time" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-lack-of-progress" data-tag="Lack of progress">Lack of progress <span class="count-tag-lack-of-progress" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-poor-teaching-or-methods" data-tag="Poor teaching or methods">Poor teaching or methods <span class="count-tag-poor-teaching-or-methods" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-never" data-tag="Never">Never <span class="count-tag-never" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-prioritizing-another-language" data-tag="Prioritizing another language">Prioritizing another language <span class="count-tag-prioritizing-another-language" style="opacity:0.85"></span></button>
+<button class="tag-filter-btn tag-lack-of-a-clear-goal" data-tag="Lack of a clear goal">Lack of a clear goal <span class="count-tag-lack-of-a-clear-goal" style="opacity:0.85"></span></button></div><div style="margin-bottom: 0.5rem;" class="toolbar"><strong>Filter by school experience:</strong> <button class="school-filter-btn active" data-school="">All <span class="count-all" style="opacity:0.85"></span></button>
+<button class="school-filter-btn" data-school="negative">Negative <span class="count-negative" style="opacity:0.85"></span></button>
+<button class="school-filter-btn" data-school="positive">Positive <span class="count-positive" style="opacity:0.85"></span></button></div><div style="margin-top: 0.5rem; margin-bottom: 0.5rem;" class="toolbar"><strong>Text language:</strong> <button id="lang-original" class="lang-toggle-btn active" data-lang="orig">Original</button> <button id="lang-english" class="lang-toggle-btn" data-lang="en">English</button></div>
 <style>
   table.obstacles-table { width: 100%; border-collapse: separate; border-spacing: 0; }
   table.obstacles-table thead th { text-align: left; border-bottom: 2px solid #ddd; padding: 8px; }
@@ -386,199 +403,199 @@ No data (did not answer the question): 53</code></pre>
 </tr>
 </thead>
 <tbody>
-<tr class="odd" data-tags="poor teaching or methods|loss of motivation|no practical need">
+<tr class="odd" data-tags="poor teaching or methods|loss of motivation|no practical need" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">До навчання в аспірантурі я намагався вивчати англійську різними методами (effortless english, перегляд професійних курсів англійською, тренував вимову), але через травму у вивченні англійської на аспірантурі де викладачки тупо задовбувала тим щоб ми перекладали з англійської на українську статті прям сидячи біля неї вголос то бажання вивчати зникло максимально. І досі доволі важко змусити себе вчити англійську проходячи курси чи читаючи книжки. Думаю спробувати персональні заняття, хоча й теперішнього рівня вистачає для професійних потреб.</span><span class="text-en" style="display:none">Before entering graduate school, I tried to learn English using various methods (effortless English, watching professional courses in English, practicing pronunciation), but due to a trauma in learning English in graduate school, where the teachers were just annoying me by making us translate articles from English to Ukrainian right next to her out loud, the desire to learn disappeared completely. And it is still quite difficult to force myself to learn English by taking courses or reading books. I think I will try personal lessons, although the current level is enough for professional needs.</span></span></td>
 <td><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="never">
+<tr class="even" data-tags="never" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Я ніколи не починав та, як наслідок, не припиняв вивчення англійської мови. Я усе життя не цурався читати англомовні статті або дивитись фільми англійскьою. Спочатку деякі деталі були не зрозумілі, але з часом, переводячи незнайомі слова та бачучи конкретні речення та як використовуються слова в контексті, мій рівень знань покращувався.</span><span class="text-en" style="display:none">I never started and, as a result, never stopped learning English. All my life I have not been shy about reading English articles or watching movies in English. At first, some details were not clear, but over time, translating unfamiliar words and seeing specific sentences and how words are used in context, my level of knowledge improved.</span></span></td>
 <td><span class="tag-pill tag-never">Never</span></td>
 </tr>
-<tr class="odd" data-tags="loss of motivation|poor teaching or methods">
+<tr class="odd" data-tags="loss of motivation|poor teaching or methods" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Втрата мотивацій (лінь). Нудні заняття в групі. Однотипні заняття з викладачем (не нейтів).</span><span class="text-en" style="display:none">Loss of motivation (laziness). Boring group classes. Monotonous classes with a teacher (non-native).</span></span></td>
 <td><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span></td>
 </tr>
-<tr class="even" data-tags="no practical need|lack of time|loss of motivation">
+<tr class="even" data-tags="no practical need|lack of time|loss of motivation" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">- коли почав працювати в укр компанії де англійська була непотрібна - коли мав перевантаження на роботі і втрату мотивації до вивчення</span><span class="text-en" style="display:none">- when I started working in a Ukrainian company where English was not needed - when I had overload at work and loss of motivation to learn</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span><span class="tag-pill tag-lack-of-time">Lack of time</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time">
+<tr class="odd" data-tags="lack of time" data-school="neutral">
 <td><span class="obst-text"><span class="text-orig">Так, об`єм роботи</span><span class="text-en" style="display:none">Yes, workload</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span></td>
 </tr>
-<tr class="even" data-tags="prioritizing another language">
+<tr class="even" data-tags="prioritizing another language" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">I studied German.</span><span class="text-en" style="display:none">I studied German.</span></span></td>
 <td><span class="tag-pill tag-prioritizing-another-language">Prioritizing another language</span></td>
 </tr>
-<tr class="odd" data-tags="no practical need">
+<tr class="odd" data-tags="no practical need" data-school="neutral">
 <td><span class="obst-text"><span class="text-orig">Не було потреби її вдосконалювати чи використовувати. Перерва у 3 роки, поки не отримала роботу в ІТ.</span><span class="text-en" style="display:none">There was no need to improve or use it. A break of 3 years, until I got a job in IT.</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="never">
+<tr class="even" data-tags="never" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">не те, щоб припиняла, я постійно десь із нею стикаюсь і так було завжди з універу, тому припиняти не припиняла, але на курси я ходжу не завжди</span><span class="text-en" style="display:none">it's not that I stopped, I constantly encounter it somewhere and it has always been like that since university, so I didn't stop, but I don't always go to courses</span></span></td>
 <td><span class="tag-pill tag-never">Never</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time">
+<tr class="odd" data-tags="lack of time" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Так ы не раз. Брак часу.</span><span class="text-en" style="display:none">Yes, and more than once. Lack of time.</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span></td>
 </tr>
-<tr class="even" data-tags="no practical need|loss of motivation">
+<tr class="even" data-tags="no practical need|loss of motivation" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Відсутність потреби і як наслідок мотивації</span><span class="text-en" style="display:none">Lack of need and, as a result, motivation</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="odd" data-tags="lack of progress|poor teaching or methods">
+<tr class="odd" data-tags="lack of progress|poor teaching or methods" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Не відчувала прогресу, а часу та засилб витрачала багато, тому треба перетерпіти цей період або спробувати знайти новий метод по вивченню - змінити викладача, методику, тематику занять</span><span class="text-en" style="display:none">I didn't feel progress, and I spent a lot of time and effort, so I need to endure this period or try to find a new method of learning - change the teacher, methodology, subject of study</span></span></td>
 <td><span class="tag-pill tag-lack-of-progress">Lack of progress</span><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span></td>
 </tr>
-<tr class="even" data-tags="no practical need">
+<tr class="even" data-tags="no practical need" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Так, коли вивчала тільки для себе і вона ще не потрібна була для роботи</span><span class="text-en" style="display:none">Yes, when I studied only for myself and it was not yet needed for work</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="odd" data-tags="prioritizing another language">
+<tr class="odd" data-tags="prioritizing another language" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Так, коли інша іноземна мова була більш пріоритетною за англійську на той момент</span><span class="text-en" style="display:none">Yes, when another foreign language was more of a priority than English at that time</span></span></td>
 <td><span class="tag-pill tag-prioritizing-another-language">Prioritizing another language</span></td>
 </tr>
-<tr class="even" data-tags="loss of motivation|lack of progress|poor teaching or methods">
+<tr class="even" data-tags="loss of motivation|lack of progress|poor teaching or methods" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Ставало нецікаво, вкладені зусилля не давали рівнозначного результату, тиск ззовні був неадекватно сильним, спричиняючи супротив</span><span class="text-en" style="display:none">It became uninteresting, the efforts invested did not give an equivalent result, the external pressure was inadequately strong, causing resistance</span></span></td>
 <td><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span><span class="tag-pill tag-lack-of-progress">Lack of progress</span><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span></td>
 </tr>
-<tr class="odd" data-tags="never">
+<tr class="odd" data-tags="never" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Не припиняла, але погіршились знання і втратилась мотивація в початковій школі через вчителя з поганими методиками навчання (запам'ятовування текстів і розказування їх напам'ять тощо), але покращилось, коли його замінили</span><span class="text-en" style="display:none">I didn't stop, but my knowledge deteriorated and I lost motivation in elementary school because of a teacher with poor teaching methods (memorizing texts and reciting them by heart, etc.), but it improved when he was replaced</span></span></td>
 <td><span class="tag-pill tag-never">Never</span></td>
 </tr>
-<tr class="even" data-tags="loss of motivation|lack of progress">
+<tr class="even" data-tags="loss of motivation|lack of progress" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Так, ставало скучно і я не бачила прогресу</span><span class="text-en" style="display:none">Yes, it became boring and I didn't see progress</span></span></td>
 <td><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span><span class="tag-pill tag-lack-of-progress">Lack of progress</span></td>
 </tr>
-<tr class="odd" data-tags="loss of motivation|no practical need">
+<tr class="odd" data-tags="loss of motivation|no practical need" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Да, бо не було стимулу та саме де її використовувати</span><span class="text-en" style="display:none">Yes, because there was no incentive and nowhere to use it</span></span></td>
 <td><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="prioritizing another language">
+<tr class="even" data-tags="prioritizing another language" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Треба було вчити іншу мову</span><span class="text-en" style="display:none">I had to learn another language</span></span></td>
 <td><span class="tag-pill tag-prioritizing-another-language">Prioritizing another language</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time|loss of motivation">
+<tr class="odd" data-tags="lack of time|loss of motivation" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Завантаженість на работі чи в універі, лінь</span><span class="text-en" style="display:none">Workload at work or university, laziness</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="even" data-tags="loss of motivation">
+<tr class="even" data-tags="loss of motivation" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">закінчується натхнення</span><span class="text-en" style="display:none">inspiration ends</span></span></td>
 <td><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="odd" data-tags="no practical need|poor teaching or methods">
+<tr class="odd" data-tags="no practical need|poor teaching or methods" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Припиняв, так як не мав чіткої потреби у цьому, заняття проходили скучно</span><span class="text-en" style="display:none">I stopped because I didn't have a clear need for it, the classes were boring</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span></td>
 </tr>
-<tr class="even" data-tags="poor teaching or methods|lack of progress">
+<tr class="even" data-tags="poor teaching or methods|lack of progress" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">- Школа змінила стратегію. Поміняли контент на платформі. Стало більше АІ і менше фідбеку, вправ. Більше стало схоже на іграшку - Не підійшов вчитель - Не було балансу навичок. Нудна граматика або слова без їх використання - Гейміфікація більше ніж якість навчання. Я зрозуміла, що щось вчу, щоб побити когось у рейтингу. А звідти вчила як попало, але скоріше - Нецікавий контент (теми). Це прям каторга, змушуєш себе щось робити - Не відчувала результату. На місці товчешся - Не ходила на англійську на роботі, бо не хотіла обговорювати особисте з колегами. Некомфортно - Страх говорити з носіями</span><span class="text-en" style="display:none">- The school changed its strategy. They changed the content on the platform. There was more AI and less feedback, exercises. It became more like a toy - The teacher was not a good fit - There was no balance of skills. Boring grammar or words without using them - Gamification more than quality of education. I realized that I was learning something to beat someone in the ranking. And from there I learned haphazardly, but faster - Uninteresting content (topics). It's a real torture, you force yourself to do something - I didn't feel the result. You're spinning your wheels - I didn't go to English at work because I didn't want to discuss personal things with colleagues. Uncomfortable - Fear of speaking with native speakers</span></span></td>
 <td><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span><span class="tag-pill tag-lack-of-progress">Lack of progress</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time|lack of progress|no practical need">
+<tr class="odd" data-tags="lack of time|lack of progress|no practical need" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Припиняла декілька раз, зазвичай причина була що не вистачало часу чи сил для виконання домашніх завдань. А без самостійної роботи результат не такий очевидний. Інший момент що насправді в роботі часто використовуєш одні й ті ж фрази, що доволі шаблонно і теж не сприяє розвутку.</span><span class="text-en" style="display:none">I stopped several times, usually the reason was that I didn't have enough time or energy to do homework. And without independent work, the result is not so obvious. Another point is that in work you often use the same phrases, which is quite шаблонно and also does not contribute to development.</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span><span class="tag-pill tag-lack-of-progress">Lack of progress</span><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="lack of time|loss of motivation">
+<tr class="even" data-tags="lack of time|loss of motivation" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Припиняв через відсутність часу та спад мотивації через доволі довге вивчення з носієм</span><span class="text-en" style="display:none">I stopped due to lack of time and a decrease in motivation due to quite a long study with a native speaker</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="odd" data-tags="no practical need">
+<tr class="odd" data-tags="no practical need" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Не було потреби</span><span class="text-en" style="display:none">There was no need</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="lack of a clear goal|lack of progress">
+<tr class="even" data-tags="lack of a clear goal|lack of progress" data-school="neutral">
 <td><span class="obst-text"><span class="text-orig">1) Не було мети. 2) не бачила прогресу</span><span class="text-en" style="display:none">1) There was no goal. 2) I didn't see progress</span></span></td>
 <td><span class="tag-pill tag-lack-of-a-clear-goal">Lack of a clear goal</span><span class="tag-pill tag-lack-of-progress">Lack of progress</span></td>
 </tr>
-<tr class="odd" data-tags="no practical need">
+<tr class="odd" data-tags="no practical need" data-school="neutral">
 <td><span class="obst-text"><span class="text-orig">Припиняла, частіше за все тоді коли в роботі не була потрібна у розмовах чи листуваннях. І жалкував що припиняла, тому що без практики швидко забувається і навички губляться.</span><span class="text-en" style="display:none">I stopped, most often when it was not needed in work in conversations or correspondence. And I regretted that I stopped, because without practice it is quickly forgotten and skills are lost.</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="loss of motivation">
+<tr class="even" data-tags="loss of motivation" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Так припиняв бо був дурним.</span><span class="text-en" style="display:none">Yes, I stopped because I was stupid.</span></span></td>
 <td><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="odd" data-tags="loss of motivation">
+<tr class="odd" data-tags="loss of motivation" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Мені потрібна була відпустка</span><span class="text-en" style="display:none">I needed a vacation</span></span></td>
 <td><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="even" data-tags="poor teaching or methods">
+<tr class="even" data-tags="poor teaching or methods" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">I finished one course and was moved onto next one. I didn’t like either the new teacher, or new classmates (they didn’t like me too, I think).</span><span class="text-en" style="display:none">I finished one course and was moved onto next one. I didn’t like either the new teacher, or new classmates (they didn’t like me too, I think).</span></span></td>
 <td><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span></td>
 </tr>
-<tr class="odd" data-tags="lack of progress|poor teaching or methods">
+<tr class="odd" data-tags="lack of progress|poor teaching or methods" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Я занималась в группе и тратила на занятие больше времени чем получала пользу</span><span class="text-en" style="display:none">I studied in a group and spent more time on the lesson than I benefited</span></span></td>
 <td><span class="tag-pill tag-lack-of-progress">Lack of progress</span><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span></td>
 </tr>
-<tr class="even" data-tags="never">
+<tr class="even" data-tags="never" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Я нею живу</span><span class="text-en" style="display:none">I live by it</span></span></td>
 <td><span class="tag-pill tag-never">Never</span></td>
 </tr>
-<tr class="odd" data-tags="no practical need">
+<tr class="odd" data-tags="no practical need" data-school="neutral">
 <td><span class="obst-text"><span class="text-orig">фінансова сторона, зовнішня потреба зникла і практичне використання теж не потрібне в буденному житті</span><span class="text-en" style="display:none">financial side, the external need disappeared and practical use is also not needed in everyday life</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="lack of time|no practical need">
+<tr class="even" data-tags="lack of time|no practical need" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Через високе робоче навантаження та на той момент часу відсутність прямої потреби</span><span class="text-en" style="display:none">Due to high workload and at that time the lack of direct need</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="odd" data-tags="poor teaching or methods|loss of motivation">
+<tr class="odd" data-tags="poor teaching or methods|loss of motivation" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">из-за преподавателя и смені приоритетов</span><span class="text-en" style="display:none">because of the teacher and a change of priorities</span></span></td>
 <td><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="even" data-tags="no practical need">
+<tr class="even" data-tags="no practical need" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Не було потреби в роботі</span><span class="text-en" style="display:none">There was no need at work</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="odd" data-tags="no practical need">
+<tr class="odd" data-tags="no practical need" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Я давно не займаються цілеспрямованим вивченням англійської, оскільки мого рівня цілком достатньо для професійного чи побутового використання. Але щось нове завжди знаходиться</span><span class="text-en" style="display:none">I have not been purposefully studying English for a long time, since my level is quite sufficient for professional or everyday use. But something new is always found</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="even" data-tags="never">
+<tr class="even" data-tags="never" data-school="neutral">
 <td><span class="obst-text"><span class="text-orig">Постійно покращую свій рівень володіння</span><span class="text-en" style="display:none">I am constantly improving my level of proficiency</span></span></td>
 <td><span class="tag-pill tag-never">Never</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time|loss of motivation|poor teaching or methods">
+<tr class="odd" data-tags="lack of time|loss of motivation|poor teaching or methods" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">іноді не вистачає часу, або ж зникає будь яке бажання вчити через те, що думаєш що вибрав невірну тактику для вивчення, хоч насправді її і не існує)</span><span class="text-en" style="display:none">sometimes there is not enough time, or any desire to learn disappears because you think that you have chosen the wrong tactic for learning, although it does not actually exist)</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span><span class="tag-pill tag-poor-teaching-or-methods">Poor teaching or methods</span></td>
 </tr>
-<tr class="even" data-tags="no practical need">
+<tr class="even" data-tags="no practical need" data-school="neutral">
 <td><span class="obst-text"><span class="text-orig">розрив в часі між університетом та початком роботі в ІТ (10 років)</span><span class="text-en" style="display:none">gap in time between university and the beginning of work in IT (10 years)</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="odd" data-tags="lack of progress|lack of a clear goal">
+<tr class="odd" data-tags="lack of progress|lack of a clear goal" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Відсутність результату, відсутність мети</span><span class="text-en" style="display:none">Lack of result, lack of purpose</span></span></td>
 <td><span class="tag-pill tag-lack-of-progress">Lack of progress</span><span class="tag-pill tag-lack-of-a-clear-goal">Lack of a clear goal</span></td>
 </tr>
-<tr class="even" data-tags="no practical need|lack of progress">
+<tr class="even" data-tags="no practical need|lack of progress" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Не було змоги відразу практикувати мову в період навчання. Тобто коли вивчаєш та відразу використовуєш знання, то тільки так бачиш сенс у навчанні</span><span class="text-en" style="display:none">There was no way to immediately practice the language during the learning period. That is, when you learn and immediately use knowledge, then only then you see the meaning in learning</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span><span class="tag-pill tag-lack-of-progress">Lack of progress</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time">
+<tr class="odd" data-tags="lack of time" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Відсутність часу, пріоритети</span><span class="text-en" style="display:none">Lack of time, priorities</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span></td>
 </tr>
-<tr class="even" data-tags="lack of progress">
+<tr class="even" data-tags="lack of progress" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">Відсутність прогресування.</span><span class="text-en" style="display:none">Lack of progress.</span></span></td>
 <td><span class="tag-pill tag-lack-of-progress">Lack of progress</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time">
+<tr class="odd" data-tags="lack of time" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">брак часу</span><span class="text-en" style="display:none">lack of time</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span></td>
 </tr>
-<tr class="even" data-tags="lack of time">
+<tr class="even" data-tags="lack of time" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">так. Не вистачало часу</span><span class="text-en" style="display:none">yes. There was not enough time</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span></td>
 </tr>
-<tr class="odd" data-tags="lack of time|loss of motivation">
+<tr class="odd" data-tags="lack of time|loss of motivation" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Недостатність часу, бажання</span><span class="text-en" style="display:none">Lack of time, desire</span></span></td>
 <td><span class="tag-pill tag-lack-of-time">Lack of time</span><span class="tag-pill tag-loss-of-motivation">Loss of motivation</span></td>
 </tr>
-<tr class="even" data-tags="no practical need">
+<tr class="even" data-tags="no practical need" data-school="positive">
 <td><span class="obst-text"><span class="text-orig">Активне навчання припинив ще після школи, оскільки відчував себе впевнено і не бачив потреби продовжувати</span><span class="text-en" style="display:none">I stopped active learning after school, because I felt confident and saw no need to continue</span></span></td>
 <td><span class="tag-pill tag-no-practical-need">No practical need</span></td>
 </tr>
-<tr class="odd" data-tags="lack of progress">
+<tr class="odd" data-tags="lack of progress" data-school="negative">
 <td><span class="obst-text"><span class="text-orig">a few minutes, just because lose my believe in success</span><span class="text-en" style="display:none">a few minutes, just because lose my believe in success</span></span></td>
 <td><span class="tag-pill tag-lack-of-progress">Lack of progress</span></td>
 </tr>
@@ -589,24 +606,112 @@ No data (did not answer the question): 53</code></pre>
   document.addEventListener('DOMContentLoaded', function() {
     var table = document.getElementById('obstacles-examples-table');
     if (!table) return;
+    
+    var currentTagFilter = '';
+    var currentSchoolFilter = '';
 
-    function applyFilter(tag) {
-      var lower = (tag || '').toLowerCase();
+    function updateCounters() {
+      var tagLower = (currentTagFilter || '').toLowerCase();
+      var schoolLower = (currentSchoolFilter || '').toLowerCase();
       var rows = table.querySelectorAll('tbody tr');
+      
+      // Count rows for school experience (based on tag filter)
+      var schoolCounts = { all: 0, negative: 0, positive: 0 };
+      // Count rows for tags (based on school filter)
+      var tagCounts = {};
+      
       rows.forEach(function(row) {
         var tags = row.getAttribute('data-tags') || '';
-        if (!lower) { row.style.display = ''; return; }
-        var match = tags.split('|').some(function(t) { return t === lower; });
-        row.style.display = match ? '' : 'none';
+        var school = row.getAttribute('data-school') || '';
+        
+        var tagMatch = !tagLower || tags.split('|').some(function(t) { return t.trim() === tagLower; });
+        var schoolMatch = !schoolLower || school === schoolLower;
+        
+        // Count school experience based on current tag filter
+        if (tagMatch) {
+          schoolCounts.all++;
+          if (school === 'negative') schoolCounts.negative++;
+          if (school === 'positive') schoolCounts.positive++;
+        }
+        
+        // Count tags based on current school filter
+        if (schoolMatch) {
+          if (tags) {
+            tags.split('|').forEach(function(tag) {
+              var t = (tag || '').trim();
+              if (t) {
+                var slug = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'tag';
+                tagCounts[slug] = (tagCounts[slug] || 0) + 1;
+              }
+            });
+          }
+        }
       });
+      
+      // Update school counter displays
+      var countAll = document.querySelector('.count-all');
+      if (countAll) countAll.textContent = schoolCounts.all > 0 ? '(' + schoolCounts.all + ')' : '';
+      
+      var countNeg = document.querySelector('.count-negative');
+      if (countNeg) countNeg.textContent = '(' + schoolCounts.negative + ')';
+      
+      var countPos = document.querySelector('.count-positive');
+      if (countPos) countPos.textContent = '(' + schoolCounts.positive + ')';
+      
+      // Update tag counter displays
+      var countAllTags = document.querySelector('.count-all-tags');
+      if (countAllTags) countAllTags.textContent = schoolCounts.all > 0 ? '(' + schoolCounts.all + ')' : '';
+      
+      
+      
+      // Update every tag counter element based on computed counts
+      document.querySelectorAll('[class^="count-tag-"]').forEach(function(counter) {
+        var className = counter.className;
+        var match = className.match(/count-tag-([^\s]+)/);
+        if (match) {
+          var slug = match[1];
+          var val = tagCounts[slug] || 0;
+          counter.textContent = '(' + val + ')';
+        }
+      });
+    }
+
+    function applyFilters() {
+      var tagLower = (currentTagFilter || '').toLowerCase();
+      var schoolLower = (currentSchoolFilter || '').toLowerCase();
+      var rows = table.querySelectorAll('tbody tr');
+      
+      rows.forEach(function(row) {
+        var tags = row.getAttribute('data-tags') || '';
+        var school = row.getAttribute('data-school') || '';
+        
+        var tagMatch = !tagLower || tags.split('|').some(function(t) { return t.trim() === tagLower; });
+        var schoolMatch = !schoolLower || school === schoolLower;
+        
+        row.style.display = (tagMatch && schoolMatch) ? '' : 'none';
+      });
+      
+      updateCounters();
     }
 
     document.addEventListener('click', function(e) {
       var btn = e.target.closest('.tag-filter-btn');
-      if (!btn) return;
-      document.querySelectorAll('.tag-filter-btn').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      applyFilter(btn.getAttribute('data-tag') || '');
+      if (btn) {
+        document.querySelectorAll('.tag-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentTagFilter = btn.getAttribute('data-tag') || '';
+        applyFilters();
+        return;
+      }
+      
+      var schoolBtn = e.target.closest('.school-filter-btn');
+      if (schoolBtn) {
+        document.querySelectorAll('.school-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        schoolBtn.classList.add('active');
+        currentSchoolFilter = schoolBtn.getAttribute('data-school') || '';
+        applyFilters();
+        return;
+      }
     });
 
     function setLang(lang) {
@@ -628,7 +733,7 @@ No data (did not answer the question): 53</code></pre>
 
     // default states
     setLang('orig');
-    applyFilter('');
+    applyFilters();
   });
 </script>
 </div>

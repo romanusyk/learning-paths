@@ -25,12 +25,26 @@ def _load_data(form_csv: Path, obstacles_eng_csv: Path, map_json: Path) -> pd.Da
         labels_by_id[rid] = labels
 
     base = (
-        eng.merge(df[["respondent_id", "obstacles"]], on="respondent_id", how="left")
+        eng.merge(df[["respondent_id", "obstacles", "enjoyed_school_classes"]], on="respondent_id", how="left")
         .rename(columns={"obstacles": "obstacles_orig", "obstacles_eng": "obstacles_eng"})
     )
 
     # Attach labels
     base["labels"] = base["respondent_id"].map(lambda rid: labels_by_id.get(int(rid), []))
+
+    # Classify school experience: negative (1-2), positive (4-5), neutral (3 or missing)
+    def classify_school_experience(score):
+        if pd.isna(score):
+            return "unknown"
+        score = float(score)
+        if score <= 2:
+            return "negative"
+        elif score >= 4:
+            return "positive"
+        else:
+            return "neutral"
+    
+    base["school_experience"] = base["enjoyed_school_classes"].map(classify_school_experience)
 
     # Keep only rows that actually have any text
     base = base.assign(
@@ -70,6 +84,12 @@ def _build_palette_css(unique_labels: List[str]) -> str:
 <style>
   .tag-filter-btn { cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; border-radius: 18px; background: #eee; border: 1px solid #ddd; }
   .tag-filter-btn.active { outline: 2px solid #222; }
+  .school-filter-btn { cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; border-radius: 18px; background: #eee; border: 1px solid #ddd; }
+  .school-filter-btn.active { outline: 2px solid #222; }
+  .school-filter-btn[data-school="negative"] { background-color: #ffb3b3; color: #000; border: 1px solid #ff6666; }
+  .school-filter-btn[data-school="positive"] { background-color: #b3ffb3; color: #000; border: 1px solid #66ff66; }
+  .school-filter-btn[data-school="negative"].active { outline: 2px solid #cc0000; }
+  .school-filter-btn[data-school="positive"].active { outline: 2px solid #009900; }
   .lang-toggle-btn { cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; border-radius: 6px; border: 1px solid #bbb; background: #fafafa; }
   .lang-toggle-btn.active { background: #333; color: #fff; border-color: #333; }
   .tag-pill { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.9em; margin: 2px 4px 2px 0; white-space: nowrap; }
@@ -80,19 +100,25 @@ def _build_palette_css(unique_labels: List[str]) -> str:
     return base_css + "<style>" + "\n".join(css_lines) + "</style>"
 
 
-def _build_buttons_html(unique_labels: Iterable[str], label_counts: Dict[str, int]) -> str:
-    # Build filter buttons (All + one per label)
+def _build_buttons_html(unique_labels: Iterable[str], label_counts: Dict[str, int], school_counts: Dict[str, int]) -> str:
+    # Build obstacle filter buttons (All + one per label)
     labels_sorted = sorted(unique_labels, key=lambda l: label_counts.get(l, 0), reverse=True)
-    buttons = [
-        '<button class="tag-filter-btn active" data-tag="">All</button>'
+    obstacle_buttons = [
+        '<button class="tag-filter-btn active" data-tag="">All <span class="count-all-tags" style="opacity:0.85"></span></button>'
     ]
     for label in labels_sorted:
         safe = html.escape(label)
         slug = _slugify(label)
-        cnt = label_counts.get(label, 0)
-        buttons.append(
-            f'<button class="tag-filter-btn tag-{slug}" data-tag="{safe}">{safe} <span style="opacity:0.85">({cnt})</span></button>'
+        obstacle_buttons.append(
+            f'<button class="tag-filter-btn tag-{slug}" data-tag="{safe}">{safe} <span class="count-tag-{slug}" style="opacity:0.85"></span></button>'
         )
+
+    # Build school experience filter buttons
+    school_buttons = [
+        '<button class="school-filter-btn active" data-school="">All <span class="count-all" style="opacity:0.85"></span></button>',
+        '<button class="school-filter-btn" data-school="negative">Negative <span class="count-negative" style="opacity:0.85"></span></button>',
+        '<button class="school-filter-btn" data-school="positive">Positive <span class="count-positive" style="opacity:0.85"></span></button>'
+    ]
 
     # Language toggle buttons
     lang_toggle = (
@@ -103,12 +129,19 @@ def _build_buttons_html(unique_labels: Iterable[str], label_counts: Dict[str, in
         '</div>'
     )
 
-    toolbar = (
+    obstacle_toolbar = (
         '<div style="margin-bottom: 0.5rem;" class="toolbar">'
-        '<strong>Filter by obstacle:</strong> ' + "\n".join(buttons) +
+        '<strong>Filter by obstacle:</strong> ' + "\n".join(obstacle_buttons) +
         '</div>'
     )
-    return _build_palette_css(labels_sorted) + toolbar + lang_toggle
+    
+    school_toolbar = (
+        '<div style="margin-bottom: 0.5rem;" class="toolbar">'
+        '<strong>Filter by school experience:</strong> ' + "\n".join(school_buttons) +
+        '</div>'
+    )
+    
+    return _build_palette_css(labels_sorted) + obstacle_toolbar + school_toolbar + lang_toggle
 
 
 def _build_table_html(df: pd.DataFrame, table_id: str) -> str:
@@ -136,8 +169,9 @@ def _build_table_html(df: pd.DataFrame, table_id: str) -> str:
     for _, row in df.iterrows():
         labels = [str(lab) for lab in (row.get("labels") or [])]
         tags_attr = "|".join(l.lower() for l in labels)
+        school_exp = str(row.get("school_experience", ""))
         rows_html.append(
-            "<tr data-tags=\"" + html.escape(tags_attr) + "\">"
+            "<tr data-tags=\"" + html.escape(tags_attr) + "\" data-school=\"" + html.escape(school_exp) + "\">"
             + "<td>" + cell_text(row) + "</td>"
             + "<td>" + cell_tags(row) + "</td>"
             + "</tr>"
@@ -167,24 +201,112 @@ def _build_script(table_id: str, tags_column_index: int = 1) -> str:
   document.addEventListener('DOMContentLoaded', function() {{
     var table = document.getElementById('{table_id}');
     if (!table) return;
+    
+    var currentTagFilter = '';
+    var currentSchoolFilter = '';
 
-    function applyFilter(tag) {{
-      var lower = (tag || '').toLowerCase();
+    function updateCounters() {{
+      var tagLower = (currentTagFilter || '').toLowerCase();
+      var schoolLower = (currentSchoolFilter || '').toLowerCase();
       var rows = table.querySelectorAll('tbody tr');
+      
+      // Count rows for school experience (based on tag filter)
+      var schoolCounts = {{ all: 0, negative: 0, positive: 0 }};
+      // Count rows for tags (based on school filter)
+      var tagCounts = {{}};
+      
       rows.forEach(function(row) {{
         var tags = row.getAttribute('data-tags') || '';
-        if (!lower) {{ row.style.display = ''; return; }}
-        var match = tags.split('|').some(function(t) {{ return t === lower; }});
-        row.style.display = match ? '' : 'none';
+        var school = row.getAttribute('data-school') || '';
+        
+        var tagMatch = !tagLower || tags.split('|').some(function(t) {{ return t.trim() === tagLower; }});
+        var schoolMatch = !schoolLower || school === schoolLower;
+        
+        // Count school experience based on current tag filter
+        if (tagMatch) {{
+          schoolCounts.all++;
+          if (school === 'negative') schoolCounts.negative++;
+          if (school === 'positive') schoolCounts.positive++;
+        }}
+        
+        // Count tags based on current school filter
+        if (schoolMatch) {{
+          if (tags) {{
+            tags.split('|').forEach(function(tag) {{
+              var t = (tag || '').trim();
+              if (t) {{
+                var slug = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'tag';
+                tagCounts[slug] = (tagCounts[slug] || 0) + 1;
+              }}
+            }});
+          }}
+        }}
       }});
+      
+      // Update school counter displays
+      var countAll = document.querySelector('.count-all');
+      if (countAll) countAll.textContent = schoolCounts.all > 0 ? '(' + schoolCounts.all + ')' : '';
+      
+      var countNeg = document.querySelector('.count-negative');
+      if (countNeg) countNeg.textContent = '(' + schoolCounts.negative + ')';
+      
+      var countPos = document.querySelector('.count-positive');
+      if (countPos) countPos.textContent = '(' + schoolCounts.positive + ')';
+      
+      // Update tag counter displays
+      var countAllTags = document.querySelector('.count-all-tags');
+      if (countAllTags) countAllTags.textContent = schoolCounts.all > 0 ? '(' + schoolCounts.all + ')' : '';
+      
+      
+      
+      // Update every tag counter element based on computed counts
+      document.querySelectorAll('[class^="count-tag-"]').forEach(function(counter) {{
+        var className = counter.className;
+        var match = className.match(/count-tag-([^\s]+)/);
+        if (match) {{
+          var slug = match[1];
+          var val = tagCounts[slug] || 0;
+          counter.textContent = '(' + val + ')';
+        }}
+      }});
+    }}
+
+    function applyFilters() {{
+      var tagLower = (currentTagFilter || '').toLowerCase();
+      var schoolLower = (currentSchoolFilter || '').toLowerCase();
+      var rows = table.querySelectorAll('tbody tr');
+      
+      rows.forEach(function(row) {{
+        var tags = row.getAttribute('data-tags') || '';
+        var school = row.getAttribute('data-school') || '';
+        
+        var tagMatch = !tagLower || tags.split('|').some(function(t) {{ return t.trim() === tagLower; }});
+        var schoolMatch = !schoolLower || school === schoolLower;
+        
+        row.style.display = (tagMatch && schoolMatch) ? '' : 'none';
+      }});
+      
+      updateCounters();
     }}
 
     document.addEventListener('click', function(e) {{
       var btn = e.target.closest('.tag-filter-btn');
-      if (!btn) return;
-      document.querySelectorAll('.tag-filter-btn').forEach(function(b) {{ b.classList.remove('active'); }});
-      btn.classList.add('active');
-      applyFilter(btn.getAttribute('data-tag') || '');
+      if (btn) {{
+        document.querySelectorAll('.tag-filter-btn').forEach(function(b) {{ b.classList.remove('active'); }});
+        btn.classList.add('active');
+        currentTagFilter = btn.getAttribute('data-tag') || '';
+        applyFilters();
+        return;
+      }}
+      
+      var schoolBtn = e.target.closest('.school-filter-btn');
+      if (schoolBtn) {{
+        document.querySelectorAll('.school-filter-btn').forEach(function(b) {{ b.classList.remove('active'); }});
+        schoolBtn.classList.add('active');
+        currentSchoolFilter = schoolBtn.getAttribute('data-school') || '';
+        applyFilters();
+        return;
+      }}
     }});
 
     function setLang(lang) {{
@@ -206,7 +328,7 @@ def _build_script(table_id: str, tags_column_index: int = 1) -> str:
 
     // default states
     setLang('orig');
-    applyFilter('');
+    applyFilters();
   }});
 </script>
 """
@@ -220,13 +342,20 @@ def render_examples_block(
     map_json: str | Path,
 ) -> str:
     base = _load_data(Path(form_csv), Path(obstacles_eng_csv), Path(map_json))
+    
     # counts per label
     counts: Dict[str, int] = {}
     for labs in base["labels"]:
         for lab in labs:
             counts[lab] = counts.get(lab, 0) + 1
     unique_labels = sorted(counts.keys(), key=lambda l: counts[l], reverse=True)
-    buttons_html = _build_buttons_html(unique_labels, counts)
+    
+    # counts per school experience
+    school_counts: Dict[str, int] = {}
+    for school_exp in base["school_experience"]:
+        school_counts[school_exp] = school_counts.get(school_exp, 0) + 1
+    
+    buttons_html = _build_buttons_html(unique_labels, counts, school_counts)
     table_html = _build_table_html(base, table_id)
     script_html = _build_script(table_id)
     return buttons_html + table_html + script_html
