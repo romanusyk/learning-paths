@@ -54,7 +54,7 @@ print(f"Total respondents: {len(df)}")
 
 ## Method Effectiveness
 
-Distribution of effectiveness ratings (1-5 scale) for each learning method. Respondents rated how effective they found each method:
+This chart shows how our respondents assessed the effectiveness of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the effectiveness of these methods:
 
 - **Online Courses**: Structured online learning programs and platforms
 - **Private Lessons**: One-on-one tutoring with individual instructors  
@@ -145,7 +145,7 @@ plt.show()
 
 ## Method Engagement
 
-Distribution of engagement/motivation ratings (1-5 scale) for different learning aspects. Respondents rated how motivated and engaged they felt with each approach:
+This chart shows how our respondents assessed the engagement of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the engagement of these methods:
 
 - **Online Exercises**: Interactive digital activities and practice tasks
 - **Speaking Club**: Group conversation and discussion sessions  
@@ -232,7 +232,7 @@ plt.show()
 
 ## Combined Effectiveness vs Engagement
 
-Average effectiveness and engagement ratings for methods, shown side by side:
+Combining the assessment of the effectiveness and engagement of each method, this chart shows the average ratings for the methods, side by side:
 
 ```{python}
 # Calculate averages for methods that appear in both effectiveness and engagement
@@ -314,7 +314,7 @@ for i, (bar1, bar2) in enumerate(zip(bars1, bars2)):
 
 # Modern, accessible styling
 ax.set_xlabel('Rating (1 = Poor, 5 = Excellent)', fontsize=13, fontweight='600', color='#2c3e50')
-ax.set_title('Which Learning Method Work Best?', 
+ax.set_title('Which Learning Methods Work Best?', 
              fontweight='bold', fontsize=16, color='#2c3e50', pad=20)
 ax.set_yticks(y)
 ax.set_yticklabels(method_names, fontsize=12, fontweight='500', color='#34495e')
