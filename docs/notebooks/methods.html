@@ -184,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>This page gives an overview the learning methods included to the survey. Our respondents rated the effectiveness and engagement of each of them on a scale of 1 to 5. Additionally, we asked them to mention additional learning methods they use.</p>
-<div id="a2e73a2b" class="cell" data-execution_count="1">
+<div id="91085343" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -233,7 +233,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="method-effectiveness" class="level2">
 <h2 class="anchored" data-anchor-id="method-effectiveness">Method Effectiveness</h2>
-<p>Distribution of effectiveness ratings (1-5 scale) for each learning method. Respondents rated how effective they found each method:</p>
+<p>This chart shows how our respondents assessed the effectiveness of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the effectiveness of these methods:</p>
 <ul>
 <li><strong>Online Courses</strong>: Structured online learning programs and platforms</li>
 <li><strong>Private Lessons</strong>: One-on-one tutoring with individual instructors<br>
@@ -245,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Reading Books</strong>: Literature, articles, and other written content in English</li>
 <li><strong>Work Tasks</strong>: Learning English through professional activities and job requirements</li>
 </ul>
-<div id="4dc1b0dc" class="cell" data-execution_count="2">
+<div id="4f17fd6f" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create combined effectiveness distribution visualization</span></span>
@@ -316,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(method_names_eff, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
 <span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Percentage'</span>, fontsize<span class="op">=</span><span class="dv">13</span>)</span>
 <span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Method Effectiveness Rating Distribution'</span>, fontsize<span class="op">=</span><span class="dv">16</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'lower right'</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
 <span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>ax.grid(axis<span class="op">=</span><span class="st">'x'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
 <span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>ax.tick_params(axis<span class="op">=</span><span class="st">'x'</span>, labelsize<span class="op">=</span><span class="dv">11</span>)</span>
 <span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>, <span class="bu">max</span>([<span class="bu">max</span>(all_percentages[r]) <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)]) <span class="op">*</span> <span class="fl">1.1</span>)</span>
@@ -335,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="method-engagement" class="level2">
 <h2 class="anchored" data-anchor-id="method-engagement">Method Engagement</h2>
-<p>Distribution of engagement/motivation ratings (1-5 scale) for different learning aspects. Respondents rated how motivated and engaged they felt with each approach:</p>
+<p>This chart shows how our respondents assessed the engagement of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the engagement of these methods:</p>
 <ul>
 <li><strong>Online Exercises</strong>: Interactive digital activities and practice tasks</li>
 <li><strong>Speaking Club</strong>: Group conversation and discussion sessions<br>
@@ -346,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Gamified Learning</strong>: Game-like learning experiences with rewards and progression</li>
 <li><strong>Personalised Feedback</strong>: Individual assessment and customized guidance</li>
 </ul>
-<div id="038d06b8" class="cell" data-execution_count="3">
+<div id="22acdafd" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create combined engagement distribution visualization</span></span>
@@ -414,7 +414,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(method_names_eng, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
 <span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Percentage'</span>, fontsize<span class="op">=</span><span class="dv">13</span>)</span>
 <span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Method Engagement Rating Distribution'</span>, fontsize<span class="op">=</span><span class="dv">16</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'lower right'</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
 <span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>ax.grid(axis<span class="op">=</span><span class="st">'x'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
 <span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>ax.tick_params(axis<span class="op">=</span><span class="st">'x'</span>, labelsize<span class="op">=</span><span class="dv">11</span>)</span>
 <span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>, <span class="bu">max</span>([<span class="bu">max</span>(all_percentages_eng[r]) <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)]) <span class="op">*</span> <span class="fl">1.1</span>)</span>
@@ -433,8 +433,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="combined-effectiveness-vs-engagement" class="level2">
 <h2 class="anchored" data-anchor-id="combined-effectiveness-vs-engagement">Combined Effectiveness vs Engagement</h2>
-<p>Average effectiveness and engagement ratings for methods, shown side by side:</p>
-<div id="1cb3693a" class="cell" data-execution_count="4">
+<p>Combining the assessment of the effectiveness and engagement of each method, this chart shows the average ratings for the methods, side by side:</p>
+<div id="d4dd807d" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate averages for methods that appear in both effectiveness and engagement</span></span>
@@ -516,7 +516,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Modern, accessible styling</span></span>
 <span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Rating (1 = Poor, 5 = Excellent)'</span>, fontsize<span class="op">=</span><span class="dv">13</span>, fontweight<span class="op">=</span><span class="st">'600'</span>, color<span class="op">=</span><span class="st">'#2c3e50'</span>)</span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Which Learning Method Work Best?'</span>, </span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Which Learning Methods Work Best?'</span>, </span>
 <span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>             fontweight<span class="op">=</span><span class="st">'bold'</span>, fontsize<span class="op">=</span><span class="dv">16</span>, color<span class="op">=</span><span class="st">'#2c3e50'</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
 <span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>ax.set_yticks(y)</span>
 <span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(method_names, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'500'</span>, color<span class="op">=</span><span class="st">'#34495e'</span>)</span>
@@ -557,7 +557,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="interactive-extra-learning-methods" class="level3">
 <h3 class="anchored" data-anchor-id="interactive-extra-learning-methods">Interactive: Extra Learning Methods</h3>
 <p>The table below shows additional learning methods mentioned by respondents in their free-text responses. Use the language toggle to switch between original and English translations.</p>
-<div id="93de11a1" class="cell" data-results="asis" data-execution_count="5">
+<div id="2fce9584" class="cell" data-results="asis" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <style>
         .lang-toggle-btn { 
