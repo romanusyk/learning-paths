@@ -1,0 +1,734 @@
+---
+title: "Motivation and Correlation Analysis"
+format:
+  html:
+    toc: false
+    number-sections: false
+    code-fold: true
+    page-layout: full
+---
+
+This page analyses how different variables in our survey relate to each other. We look at motivation types (integrative vs instrumental), learning methods, and general attitudes towards English learning.
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import spearmanr
+
+# Load data
+df = pd.read_csv('../data/form_data.csv')
+
+print(f"Total respondents: {len(df)}")
+```
+
+## Motivation Types
+
+We analyse two main types of motivation for learning English:
+
+- **Integrative Motivation**: Learning English for personal enrichment, cultural understanding, and connection with English-speaking people
+- **Instrumental Motivation**: Learning English for practical purposes such as career advancement and professional requirements
+
+```{python}
+# Define the columns for each motivation type
+instrumental_col_names = [
+    'perfection_is_key_to_career',
+    'need_english_for_work_docs',
+    'speaking_is_key_to_career',
+    'must_learn',
+]
+
+integrative_col_names = [
+    'curious_about_english_colleagues',
+    'value_original_movies',
+    'value_original_books',
+    'curious_about_english_culture',
+    'curious_about_english_system',
+]
+
+# Build the motivation columns as the mean of their component questions
+df['instrumental'] = df[instrumental_col_names].mean(axis=1)
+df['integrative'] = df[integrative_col_names].mean(axis=1)
+
+# Create boxplot to visualise distribution
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Instrumental motivation boxplot
+bp1 = ax1.boxplot([df['instrumental'].dropna()], 
+                   tick_labels=['Instrumental'],
+                   patch_artist=True,
+                   widths=0.5)
+bp1['boxes'][0].set_facecolor('#e74c3c')
+bp1['boxes'][0].set_alpha(0.7)
+ax1.set_ylabel('Motivation Score (1-5)', fontsize=12, fontweight='600')
+ax1.set_title('Instrumental Motivation Distribution', fontsize=14, fontweight='bold')
+ax1.set_ylim(0.5, 5.5)
+ax1.grid(axis='y', alpha=0.3)
+
+# Integrative motivation boxplot
+bp2 = ax2.boxplot([df['integrative'].dropna()], 
+                   tick_labels=['Integrative'],
+                   patch_artist=True,
+                   widths=0.5)
+bp2['boxes'][0].set_facecolor('#3498db')
+bp2['boxes'][0].set_alpha(0.7)
+ax2.set_ylabel('Motivation Score (1-5)', fontsize=12, fontweight='600')
+ax2.set_title('Integrative Motivation Distribution', fontsize=14, fontweight='bold')
+ax2.set_ylim(0.5, 5.5)
+ax2.grid(axis='y', alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Motivation Distribution Heatmap
+
+This heatmap shows how respondents are distributed across the two types of motivation. Each cell shows how many respondents have that combination of integrative (x-axis) and instrumental (y-axis) motivation scores.
+
+```{python}
+# Create bins for the heatmap with 0.5 increments
+def bin_motivation(value):
+    """Bin values to 0.5 increments: 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0"""
+    if pd.isna(value):
+        return np.nan
+    return round(value * 2) / 2
+
+df['instrumental_binned'] = df['instrumental'].apply(bin_motivation)
+df['integrative_binned'] = df['integrative'].apply(bin_motivation)
+
+# Create a pivot table for the heatmap
+heatmap_data = pd.crosstab(
+    df['instrumental_binned'], 
+    df['integrative_binned'],
+    dropna=False
+)
+
+# Ensure all values from 1.0 to 5.0 in 0.5 increments are present
+bins = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+for b in bins:
+    if b not in heatmap_data.index:
+        heatmap_data.loc[b] = 0
+    if b not in heatmap_data.columns:
+        heatmap_data[b] = 0
+
+# Sort index and columns, then reverse index to flip y-axis (5 at top, 1 at bottom)
+heatmap_data = heatmap_data.sort_index(ascending=False).sort_index(axis=1)
+
+# Create the heatmap
+plt.figure(figsize=(12, 9))
+sns.heatmap(
+    heatmap_data, 
+    annot=True, 
+    fmt='g',
+    cmap='YlOrRd',
+    cbar_kws={'label': 'Number of Respondents', 'pad': 0.02},
+    linewidths=0.5,
+    linecolor='gray',
+    annot_kws={'fontsize': 10}
+)
+
+plt.xlabel('Integrative Motivation', fontsize=14, fontweight='bold', labelpad=10)
+plt.ylabel('Instrumental Motivation', fontsize=14, fontweight='bold', labelpad=10)
+plt.title('Distribution of Respondents by Motivation Type', fontsize=16, fontweight='bold', pad=20)
+
+# Adjust tick labels
+ax = plt.gca()
+ax.tick_params(axis='both', which='major', labelsize=11)
+
+plt.tight_layout()
+plt.show()
+
+# Print summary statistics
+total_respondents = heatmap_data.sum().sum()
+print(f"\nTotal respondents with complete motivation data: {int(total_respondents)}")
+print(f"\nMost common motivation profile: Instrumental={heatmap_data.stack().idxmax()[0]}, Integrative={heatmap_data.stack().idxmax()[1]}")
+print(f"Respondents with this profile: {int(heatmap_data.stack().max())}")
+```
+
+## Correlation Matrices
+
+We examine how different aspects of English learning relate to each other. We use Spearman's rank correlation coefficient, which measures how strongly two variables move together (values range from -1 to +1, where stronger correlations are further from 0).
+
+### Matrix 1: Skill Levels and General Attitudes
+
+This matrix shows how skill levels relate to general attitudes towards English learning.
+
+**Skill Levels** measure how confident respondents feel using English across four core language skills:
+
+- `level:reading` - Confidence in reading English text
+- `level:writing` - Confidence in writing in English
+- `level:listening` - Confidence in understanding spoken English
+- `level:speaking` - Confidence in speaking English
+
+**General Attitudes** capture beliefs, feelings, and experiences related to English learning:
+
+- `enjoyed_school_classes` - Enjoyment of English classes at school
+- `felt_pressure` - Felt significant pressure to learn English from parents or work
+- `perfection_is_key_to_career` - Belief that perfect English is key to career success
+- `i_know_all_i_need` - Current English level meets all needs
+- `english_is_not_so_important` - English turned out less important than initially thought
+- `learning_is_demaning` - Learning English requires too much time and effort
+- `need_english_for_work_docs` - Need English for technical documentation and work resources
+- `curious_about_english_colleagues` - Interested in learning more about English-speaking colleagues
+- `learning_is_exhausting` - Learning English is boring and exhausting
+- `speaking_is_key_to_career` - Quality of communication with English-speaking colleagues is key to career growth
+- `need_to_feel_progress` - Gets upset when not feeling progress in learning English
+- `glad_to_feel_progress` - Happy when noticing improvement in English skills
+- `must_learn` - IT specialists in Ukraine are expected to have high English proficiency
+- `was_ok_with_non_native` - Felt comfortable during last conversation with non-native English speaker
+- `english_is_not_applicable` - Rarely encounters opportunities to apply English skills
+- `value_original_movies` - Misses many details when watching English films with translation/subtitles
+- `value_original_books` - Misses many details when reading English literature in translation
+- `learning_is_fun` - Learning English is pleasant and engaging
+- `want_to_improve` - Wants to improve English skills
+- `curious_about_english_culture` - Interested in learning about culture of English-speaking countries
+- `curious_about_english_system` - Interested in why English is structured with its particular rules
+
+```{python}
+# Define column groups
+level_col_names = [
+    'level:reading',
+    'level:writing',
+    'level:listening',
+    'level:speaking',
+]
+
+general_likert_col_names = [
+    'enjoyed_school_classes',
+    'felt_pressure',
+    'perfection_is_key_to_career',
+    'i_know_all_i_need',
+    'english_is_not_so_important',
+    'learning_is_demaning',
+    'need_english_for_work_docs',
+    'curious_about_english_colleagues',
+    'learning_is_exhausting',
+    'speaking_is_key_to_career',
+    'need_to_feel_progress',
+    'glad_to_feel_progress',
+    'must_learn',
+    'was_ok_with_non_native',
+    'english_is_not_applicable',
+    'value_original_movies',
+    'value_original_books',
+    'learning_is_fun',
+    'want_to_improve',
+    'curious_about_english_culture',
+    'curious_about_english_system',
+]
+
+# Combine columns for matrix 1
+cols_matrix1 = level_col_names + general_likert_col_names
+
+# Create correlation matrix
+corr_matrix1 = df[cols_matrix1].corr(method='spearman')
+
+# Create clean labels for display
+def clean_label(col_name):
+    """Clean column names for better readability"""
+    replacements = {
+        'method_effectiveness:': 'eff:',
+        'level:': 'level:',
+        'motives:': 'mot:',
+        'online_courses': 'online',
+        'private_lessons': 'private',
+        'textbooks': 'books',
+        'watching_movies': 'movies',
+        'speaking_club': 'speak_club',
+        'reading_books': 'read_books',
+        'work_tasks': 'work',
+        'online_exercises': 'online_ex',
+        'personalised_feedback': 'feedback',
+        'gamified_learning': 'gamified',
+        'enjoyed_school_classes': 'enjoyed_school',
+        'felt_pressure': 'pressure',
+        'perfection_is_key_to_career': 'perfection→career',
+        'i_know_all_i_need': 'know_enough',
+        'english_is_not_so_important': 'not_important',
+        'learning_is_demaning': 'demanding',
+        'need_english_for_work_docs': 'need_for_docs',
+        'curious_about_english_colleagues': 'curious_colleagues',
+        'learning_is_exhausting': 'exhausting',
+        'speaking_is_key_to_career': 'speaking→career',
+        'need_to_feel_progress': 'need_progress',
+        'glad_to_feel_progress': 'glad_progress',
+        'must_learn': 'must_learn',
+        'was_ok_with_native': 'ok_native',
+        'was_ok_with_non_native': 'ok_non_native',
+        'english_is_not_applicable': 'not_applicable',
+        'value_original_movies': 'value_movies',
+        'value_original_books': 'value_books',
+        'learning_is_fun': 'fun',
+        'want_to_improve': 'want_improve',
+        'curious_about_english_culture': 'curious_culture',
+        'curious_about_english_system': 'curious_system',
+    }
+    
+    result = col_name
+    for old, new in replacements.items():
+        result = result.replace(old, new)
+    return result
+
+# Apply labels
+clean_labels1 = [clean_label(col) for col in cols_matrix1]
+
+# Plot correlation matrix
+fig, ax = plt.subplots(figsize=(20, 18))
+sns.heatmap(
+    corr_matrix1, 
+    annot=True, 
+    cmap='coolwarm',
+    fmt=".2f", 
+    linewidths=0.5,
+    annot_kws={'size': 9},
+    center=0,
+    vmin=-1,
+    vmax=1,
+    xticklabels=clean_labels1,
+    yticklabels=clean_labels1
+)
+
+plt.title('Matrix 1: Skill Levels & General Attitudes', 
+          fontsize=20, fontweight='bold', pad=20)
+plt.xticks(rotation=45, ha='right', fontsize=11)
+plt.yticks(rotation=0, fontsize=11)
+plt.tight_layout()
+plt.show()
+
+```
+
+### Notable Correlations in Matrix 1
+
+**Interesting Positive Correlations:**
+
+```{python}
+#| echo: false
+from IPython.display import Markdown, display
+
+interesting_pos = [
+    ('want_to_improve', 'glad_to_feel_progress'),
+    ('learning_is_fun', 'curious_about_english_culture'),
+    ('value_original_movies', 'value_original_books'),
+    ('level:reading', 'i_know_all_i_need'),
+    ('curious_about_english_system', 'curious_about_english_culture'),
+]
+
+pos_lines = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_pos:
+    if col1 in cols_matrix1 and col2 in cols_matrix1:
+        corr_val = corr_matrix1.loc[col1, col2]
+        pos_lines.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(pos_lines)))
+```
+
+**Interesting Negative Correlations:**
+
+```{python}
+#| echo: false
+interesting_neg = [
+    ('learning_is_exhausting', 'learning_is_fun'),
+    ('i_know_all_i_need', 'want_to_improve'),
+    ('english_is_not_applicable', 'need_english_for_work_docs'),
+    ('learning_is_exhausting', 'curious_about_english_culture'),
+]
+
+neg_lines = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_neg:
+    if col1 in cols_matrix1 and col2 in cols_matrix1:
+        corr_val = corr_matrix1.loc[col1, col2]
+        neg_lines.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(neg_lines)))
+```
+
+### Matrix 2: Method Effectiveness, Skill Levels, and General Attitudes
+
+This matrix shows how the effectiveness of learning methods relates to skill levels and general attitudes.
+
+**Method Effectiveness** measures how effective respondents found different learning approaches:
+
+- `method_effectiveness:online_courses` - Online courses and apps (e.g., Duolingo, Coursera)
+- `method_effectiveness:private_lessons` - One-on-one lessons with a teacher
+- `method_effectiveness:textbooks` - Self-study with books and textbooks
+- `method_effectiveness:watching_movies` - Watching films and TV shows in English
+- `method_effectiveness:audio` - Listening to English songs and podcasts
+- `method_effectiveness:speaking_club` - Conversation clubs with native speakers
+- `method_effectiveness:reading_books` - Reading English books and articles
+- `method_effectiveness:work_tasks` - Using English at work (e.g., business correspondence and meetings)
+
+```{python}
+method_effectiveness_col_names = [
+    'method_effectiveness:online_courses',
+    'method_effectiveness:private_lessons', 
+    'method_effectiveness:textbooks',
+    'method_effectiveness:watching_movies',
+    'method_effectiveness:audio',
+    'method_effectiveness:speaking_club',
+    'method_effectiveness:reading_books',
+    'method_effectiveness:work_tasks'
+]
+
+# Combine columns for matrix 2
+cols_matrix2 = method_effectiveness_col_names + level_col_names + general_likert_col_names
+
+# Create correlation matrix
+corr_matrix2 = df[cols_matrix2].corr(method='spearman')
+
+# Apply labels
+clean_labels2 = [clean_label(col) for col in cols_matrix2]
+
+# Plot correlation matrix
+fig, ax = plt.subplots(figsize=(24, 20))
+sns.heatmap(
+    corr_matrix2, 
+    annot=True, 
+    cmap='coolwarm',
+    fmt=".2f", 
+    linewidths=0.5,
+    annot_kws={'size': 8},
+    center=0,
+    vmin=-1,
+    vmax=1,
+    xticklabels=clean_labels2,
+    yticklabels=clean_labels2
+)
+
+plt.title('Matrix 2: Method Effectiveness, Skill Levels & General Attitudes', 
+          fontsize=20, fontweight='bold', pad=20)
+plt.xticks(rotation=45, ha='right', fontsize=10)
+plt.yticks(rotation=0, fontsize=10)
+plt.tight_layout()
+plt.show()
+
+```
+
+### Notable Correlations in Matrix 2
+
+**Interesting Positive Correlations (involving Method Effectiveness):**
+
+```{python}
+#| echo: false
+interesting_method_pos = [
+    ('method_effectiveness:speaking_club', 'want_to_improve'),
+    ('method_effectiveness:reading_books', 'curious_about_english_culture'),
+    ('method_effectiveness:work_tasks', 'need_english_for_work_docs'),
+    ('method_effectiveness:private_lessons', 'need_to_feel_progress'),
+]
+
+pos_lines_m2 = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_method_pos:
+    if col1 in cols_matrix2 and col2 in cols_matrix2:
+        corr_val = corr_matrix2.loc[col1, col2]
+        pos_lines_m2.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(pos_lines_m2)))
+```
+
+**Interesting Negative Correlations (involving Method Effectiveness):**
+
+```{python}
+#| echo: false
+interesting_method_neg = [
+    ('method_effectiveness:private_lessons', 'i_know_all_i_need'),
+    ('method_effectiveness:speaking_club', 'learning_is_exhausting'),
+    ('method_effectiveness:online_courses', 'level:speaking'),
+]
+
+neg_lines_m2 = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_method_neg:
+    if col1 in cols_matrix2 and col2 in cols_matrix2:
+        corr_val = corr_matrix2.loc[col1, col2]
+        neg_lines_m2.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(neg_lines_m2)))
+```
+
+### Matrix 3: Motivation/Engagement, Skill Levels, and General Attitudes
+
+This matrix shows how engagement with learning activities relates to skill levels and general attitudes.
+
+**Motivation/Engagement** measures how interesting and motivating respondents find different activities:
+
+- `motives:online_exercises` - Interactive online exercises
+- `motives:speaking_club` - Group communication
+- `motives:watching_movies` - Watching films and other video content in English
+- `motives:reading_books` - Reading articles and books in English
+- `motives:work_tasks` - Completing work tasks using English
+- `motives:gamified_learning` - Learning in game format
+- `motives:personalised_feedback` - Personalised feedback from a teacher
+
+```{python}
+motives_col_names = [
+    'motives:online_exercises',
+    'motives:speaking_club',
+    'motives:watching_movies', 
+    'motives:reading_books',
+    'motives:work_tasks',
+    'motives:gamified_learning',
+    'motives:personalised_feedback'
+]
+
+# Combine columns for matrix 3
+cols_matrix3 = motives_col_names + level_col_names + general_likert_col_names
+
+# Create correlation matrix
+corr_matrix3 = df[cols_matrix3].corr(method='spearman')
+
+# Apply labels
+clean_labels3 = [clean_label(col) for col in cols_matrix3]
+
+# Plot correlation matrix
+fig, ax = plt.subplots(figsize=(22, 18))
+sns.heatmap(
+    corr_matrix3, 
+    annot=True, 
+    cmap='coolwarm',
+    fmt=".2f", 
+    linewidths=0.5,
+    annot_kws={'size': 8},
+    center=0,
+    vmin=-1,
+    vmax=1,
+    xticklabels=clean_labels3,
+    yticklabels=clean_labels3
+)
+
+plt.title('Matrix 3: Motivation/Engagement, Skill Levels & General Attitudes', 
+          fontsize=20, fontweight='bold', pad=20)
+plt.xticks(rotation=45, ha='right', fontsize=10)
+plt.yticks(rotation=0, fontsize=10)
+plt.tight_layout()
+plt.show()
+
+```
+
+### Notable Correlations in Matrix 3
+
+**Interesting Positive Correlations (involving Motivation/Engagement):**
+
+```{python}
+#| echo: false
+interesting_motive_pos = [
+    ('motives:reading_books', 'curious_about_english_culture'),
+    ('motives:speaking_club', 'want_to_improve'),
+    ('motives:personalised_feedback', 'need_to_feel_progress'),
+    ('motives:watching_movies', 'value_original_movies'),
+]
+
+pos_lines_m3 = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_motive_pos:
+    if col1 in cols_matrix3 and col2 in cols_matrix3:
+        corr_val = corr_matrix3.loc[col1, col2]
+        pos_lines_m3.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(pos_lines_m3)))
+```
+
+**Interesting Negative Correlations (involving Motivation/Engagement):**
+
+```{python}
+#| echo: false
+interesting_motive_neg = [
+    ('motives:speaking_club', 'learning_is_exhausting'),
+    ('motives:reading_books', 'english_is_not_so_important'),
+    ('motives:gamified_learning', 'i_know_all_i_need'),
+]
+
+neg_lines_m3 = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_motive_neg:
+    if col1 in cols_matrix3 and col2 in cols_matrix3:
+        corr_val = corr_matrix3.loc[col1, col2]
+        neg_lines_m3.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(neg_lines_m3)))
+```
+
+### Matrix 4: Motivation Types, Skill Levels, and General Attitudes
+
+This matrix shows how the two main motivation types relate to skill levels and general attitudes.
+
+**Motivation Types** are combined scores built from multiple questions:
+
+- `integrative` - Average of: curious about English-speaking colleagues, valuing original movies, valuing original books, curious about English-speaking culture, curious about English language structure
+- `instrumental` - Average of: perfection is key to career, need English for work docs, speaking is key to career, must learn English
+
+```{python}
+# Combine columns for matrix 4
+cols_matrix4 = ['integrative', 'instrumental'] + level_col_names + general_likert_col_names
+
+# Create correlation matrix
+corr_matrix4 = df[cols_matrix4].corr(method='spearman')
+
+# Apply labels
+clean_labels4 = [clean_label(col) for col in cols_matrix4]
+
+# Plot correlation matrix
+fig, ax = plt.subplots(figsize=(20, 18))
+sns.heatmap(
+    corr_matrix4, 
+    annot=True, 
+    cmap='coolwarm',
+    fmt=".2f", 
+    linewidths=0.5,
+    annot_kws={'size': 9},
+    center=0,
+    vmin=-1,
+    vmax=1,
+    xticklabels=clean_labels4,
+    yticklabels=clean_labels4
+)
+
+plt.title('Matrix 4: Motivation Types, Skill Levels & General Attitudes', 
+          fontsize=20, fontweight='bold', pad=20)
+plt.xticks(rotation=45, ha='right', fontsize=10)
+plt.yticks(rotation=0, fontsize=10)
+plt.tight_layout()
+plt.show()
+
+```
+
+### Notable Correlations in Matrix 4
+
+**Interesting Positive Correlations (involving Motivation Types):**
+
+```{python}
+#| echo: false
+interesting_types_pos = [
+    ('integrative', 'learning_is_fun'),
+    ('integrative', 'want_to_improve'),
+    ('integrative', 'glad_to_feel_progress'),
+    ('instrumental', 'need_to_feel_progress'),
+    ('instrumental', 'want_to_improve'),
+]
+
+pos_lines_m4 = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_types_pos:
+    if col1 in cols_matrix4 and col2 in cols_matrix4:
+        corr_val = corr_matrix4.loc[col1, col2]
+        pos_lines_m4.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(pos_lines_m4)))
+```
+
+**Interesting Negative Correlations (involving Motivation Types):**
+
+```{python}
+#| echo: false
+interesting_types_neg = [
+    ('integrative', 'learning_is_exhausting'),
+    ('integrative', 'english_is_not_so_important'),
+    ('instrumental', 'i_know_all_i_need'),
+    ('instrumental', 'english_is_not_so_important'),
+]
+
+neg_lines_m4 = ["| Variable 1 | Variable 2 | Correlation |", "|------------|------------|-------------|"]
+for col1, col2 in interesting_types_neg:
+    if col1 in cols_matrix4 and col2 in cols_matrix4:
+        corr_val = corr_matrix4.loc[col1, col2]
+        neg_lines_m4.append(f"| {col1} | {col2} | r = {corr_val:.3f} |")
+display(Markdown('\n'.join(neg_lines_m4)))
+```
+
+## Key Insights
+
+```{python}
+#| echo: false
+# Setup: Create mapping for full descriptions and format function
+col_descriptions = {
+    'level:reading': 'Confidence in reading English text',
+    'level:writing': 'Confidence in writing in English',
+    'level:listening': 'Confidence in understanding spoken English',
+    'level:speaking': 'Confidence in speaking English',
+    'enjoyed_school_classes': 'Enjoyment of English classes at school',
+    'felt_pressure': 'Felt significant pressure to learn English from parents or work',
+    'perfection_is_key_to_career': 'Belief that perfect English is key to career success',
+    'i_know_all_i_need': 'Current English level meets all needs',
+    'english_is_not_so_important': 'English turned out less important than initially thought',
+    'learning_is_demaning': 'Learning English requires too much time and effort',
+    'need_english_for_work_docs': 'Need English for technical documentation and work resources',
+    'curious_about_english_colleagues': 'Interested in learning more about English-speaking colleagues',
+    'learning_is_exhausting': 'Learning English is boring and exhausting',
+    'speaking_is_key_to_career': 'Quality of communication with English-speaking colleagues is key to career growth',
+    'need_to_feel_progress': 'Gets upset when not feeling progress in learning English',
+    'glad_to_feel_progress': 'Happy when noticing improvement in English skills',
+    'must_learn': 'IT specialists in Ukraine are expected to have high English proficiency',
+    'was_ok_with_non_native': 'Felt comfortable during last conversation with non-native English speaker',
+    'english_is_not_applicable': 'Rarely encounters opportunities to apply English skills',
+    'value_original_movies': 'Misses many details when watching English films with translation/subtitles',
+    'value_original_books': 'Misses many details when reading English literature in translation',
+    'learning_is_fun': 'Learning English is pleasant and engaging',
+    'want_to_improve': 'Wants to improve English skills',
+    'curious_about_english_culture': 'Interested in learning about culture of English-speaking countries',
+    'curious_about_english_system': 'Interested in why English is structured with its particular rules',
+}
+
+def format_col(col):
+    """Format column with description and name"""
+    desc = col_descriptions.get(col, col.replace('_', ' ').title())
+    return f"{desc} ({col})"
+
+# Prepare data for all Key Insights sections
+integrative_corrs = corr_matrix4['integrative'].copy()
+instrumental_corrs = corr_matrix4['instrumental'].copy()
+
+# Remove the component columns and self-correlation
+exclude_from_integrative = integrative_col_names + ['integrative']
+exclude_from_instrumental = instrumental_col_names + ['instrumental']
+
+integrative_corrs_filtered = integrative_corrs.drop(exclude_from_integrative, errors='ignore')
+instrumental_corrs_filtered = instrumental_corrs.drop(exclude_from_instrumental, errors='ignore')
+```
+
+### Integrative Motivation: Strongest Associations
+
+People with strong **integrative motivation** (learning English for cultural understanding and personal enrichment) tend to rate the following aspects of English learning more positively:
+
+```{python}
+#| echo: false
+# Format integrative correlations
+integ_lines = ["| Question | Correlation |", "|----------|-------------|"]
+for var, corr in integrative_corrs_filtered.sort_values(ascending=False)[:5].items():
+    integ_lines.append(f"| {format_col(var)} | r = {corr:.3f} |")
+display(Markdown('\n'.join(integ_lines)))
+```
+
+These correlations show that people with strong integrative motivation find English learning more enjoyable and want to improve beyond just practical needs.
+
+### Instrumental Motivation: Strongest Associations
+
+People with strong **instrumental motivation** (learning English for career and practical purposes) tend to rate the following aspects more highly:
+
+```{python}
+#| echo: false
+# Format instrumental correlations
+instr_lines = ["| Question | Correlation |", "|----------|-------------|"]
+for var, corr in instrumental_corrs_filtered.sort_values(ascending=False)[:5].items():
+    instr_lines.append(f"| {format_col(var)} | r = {corr:.3f} |")
+display(Markdown('\n'.join(instr_lines)))
+```
+
+People with strong instrumental motivation focus more on feeling progress and recognise that English is practically necessary for their professional work.
+
+### Differential Correlations: What Distinguishes the Two Motivation Types?
+
+The following variables show the **largest differences** in how they relate to integrative versus instrumental motivation. These help us understand what truly separates the two types beyond how we defined them. Variables that relate much more strongly to one type than the other reveal the unique patterns of attitudes for each motivation type.
+
+```{python}
+#| echo: false
+# Find variables with largest absolute difference in correlation
+diff_corrs = []
+common_cols = set(integrative_corrs_filtered.index) & set(instrumental_corrs_filtered.index)
+for col in common_cols:
+    int_corr = integrative_corrs[col]
+    ins_corr = instrumental_corrs[col]
+    diff = abs(int_corr - ins_corr)
+    diff_corrs.append((col, int_corr, ins_corr, diff))
+
+diff_corrs_sorted = sorted(diff_corrs, key=lambda x: x[3], reverse=True)
+
+# Format as table
+diff_lines = ["| Question | Integrative | Instrumental | Δ | Stronger for |", 
+              "|----------|-------------|--------------|---|--------------|"]
+for col, int_corr, ins_corr, diff in diff_corrs_sorted[:7]:
+    direction = "Integrative" if int_corr > ins_corr else "Instrumental"
+    col_display = format_col(col)
+    diff_lines.append(f"| {col_display} | r = {int_corr:.3f} | r = {ins_corr:.3f} | {diff:.3f} | **{direction}** |")
+display(Markdown('\n'.join(diff_lines)))
+```
+
+For example, variables that relate more strongly to **integrative motivation** (like enjoying learning or cultural curiosity) show that inner interest drives this type. Variables that relate more strongly to **instrumental motivation** (like career necessity or documentation needs) show its practical, goal-focused nature.

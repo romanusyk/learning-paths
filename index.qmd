@@ -9,11 +9,13 @@ page-layout: full
 
 ## Welcome
 
-This site collects small analyses and materials around learning English for IT professionals.
+This site presents analysis and materials about learning English for IT professionals.
 
 ### Highlights
 
 - Explore whether respondents have ever paused learning English: [Obstacles](notebooks/obstacles.qmd)
+- View how effective and engaging respondents found different learning methods: [Learning Methods](notebooks/methods.qmd)
+- Analyse motivation types and correlations between learning attitudes: [Correlations](notebooks/correlations.qmd)
 
 ### How to reproduce
 

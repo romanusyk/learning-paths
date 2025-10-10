@@ -8,7 +8,7 @@ format:
     page-layout: full
 ---
 
-This page gives an overview the learning methods included to the survey. Our respondents rated the effectiveness and engagement of each of them on a scale of 1 to 5. Additionally, we asked them to mention additional learning methods they use.
+This page shows the learning methods we asked about in the survey. Respondents rated how effective and engaging they found each method on a scale of 1 to 5. We also asked them to share any other learning methods they use.
 
 ```{python}
 import pandas as pd
@@ -54,7 +54,7 @@ print(f"Total respondents: {len(df)}")
 
 ## Method Effectiveness
 
-This chart shows how our respondents assessed the effectiveness of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the effectiveness of these methods:
+This chart shows how respondents rated the effectiveness of each learning method. For each method, you can see how many people gave each rating (on a 1-5 scale). The methods are:
 
 - **Online Courses**: Structured online learning programs and platforms
 - **Private Lessons**: One-on-one tutoring with individual instructors  
@@ -66,11 +66,11 @@ This chart shows how our respondents assessed the effectiveness of each learning
 - **Work Tasks**: Learning English through professional activities and job requirements
 
 ```{python}
-# Create combined effectiveness distribution visualization
-# Define colors for each rating (1-5)
+# Create effectiveness distribution chart
+# Define colours for each rating (1-5)
 rating_colors = {1: '#FF4B4B', 2: '#FF8C42', 3: '#FFD23F', 4: '#8FBC8F', 5: '#32CD32'}
 
-# Prepare data for all methods and calculate average effectiveness for sorting
+# Prepare data and calculate average for sorting
 method_data_eff = []
 
 for col in effectiveness_cols:
@@ -145,7 +145,7 @@ plt.show()
 
 ## Method Engagement
 
-This chart shows how our respondents assessed the engagement of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the engagement of these methods:
+This chart shows how engaging respondents found each learning method. For each method, you can see how many people gave each rating (on a 1-5 scale). The methods are:
 
 - **Online Exercises**: Interactive digital activities and practice tasks
 - **Speaking Club**: Group conversation and discussion sessions  
@@ -156,8 +156,8 @@ This chart shows how our respondents assessed the engagement of each learning me
 - **Personalised Feedback**: Individual assessment and customized guidance
 
 ```{python}
-# Create combined engagement distribution visualization
-# Prepare data for all engagement methods and calculate average for sorting
+# Create engagement distribution chart
+# Prepare data and calculate average for sorting
 method_data_eng = []
 
 for col in engagement_cols:
@@ -230,13 +230,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Combined Effectiveness vs Engagement
+## Effectiveness vs Engagement
 
-Combining the assessment of the effectiveness and engagement of each method, this chart shows the average ratings for the methods, side by side:
+This chart compares the average effectiveness and engagement ratings for each method, shown side by side:
 
 ```{python}
-# Calculate averages for methods that appear in both effectiveness and engagement
-# Map similar methods between the two categories
+# Calculate averages for methods
+# Group similar methods together
 all_methods = {
     'Speaking clubs': (['method_effectiveness:speaking_club'], ['motives:speaking_club']),
     'Movies & Music': (['method_effectiveness:watching_movies', 'method_effectiveness:audio'], ['motives:watching_movies']),
@@ -282,23 +282,23 @@ method_names = [item['name'] for item in combined_method_data]
 effectiveness_scores = [item['effectiveness'] for item in combined_method_data]
 engagement_scores = [item['engagement'] for item in combined_method_data]
 
-# Create horizontal side-by-side bar chart
+# Create horizontal bar chart
 y = np.arange(len(method_names))
 height = 0.28
 
-# Set modern, friendly font
+# Set clean font
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
 
 fig, ax = plt.subplots(figsize=(11, 6))
 
-# Create horizontal bars with vibrant, friendly colors
+# Create horizontal bars with clear colours
 bars1 = ax.barh(y + height/2, effectiveness_scores, height, label='Effectiveness', 
                 color='#3498db', alpha=0.9, edgecolor='white', linewidth=0.5)
 bars2 = ax.barh(y - height/2, engagement_scores, height, label='Engagement', 
                 color='#e74c3c', alpha=0.9, edgecolor='white', linewidth=0.5)
 
-# Add value labels on bars with better styling
+# Add value labels on bars
 for i, (bar1, bar2) in enumerate(zip(bars1, bars2)):
     if not np.isnan(effectiveness_scores[i]):
         width1 = bar1.get_width()
@@ -312,14 +312,14 @@ for i, (bar1, bar2) in enumerate(zip(bars1, bars2)):
                 f'{engagement_scores[i]:.1f}', ha='left', va='center', 
                 fontsize=11, fontweight='bold', color='#2c3e50')
 
-# Modern, accessible styling
+# Clear styling
 ax.set_xlabel('Rating (1 = Poor, 5 = Excellent)', fontsize=13, fontweight='600', color='#2c3e50')
 ax.set_title('Which Learning Methods Work Best?', 
              fontweight='bold', fontsize=16, color='#2c3e50', pad=20)
 ax.set_yticks(y)
 ax.set_yticklabels(method_names, fontsize=12, fontweight='500', color='#34495e')
 
-# Clean, modern styling
+# Clean styling
 ax.set_xticks([1, 2, 3, 4, 5])
 ax.set_xticklabels(['1', '2', '3', '4', '5'], fontsize=11, color='#7f8c8d')
 ax.legend(fontsize=12, loc='upper right', frameon=True, fancybox=True, 
@@ -327,7 +327,7 @@ ax.legend(fontsize=12, loc='upper right', frameon=True, fancybox=True,
 ax.grid(axis='x', alpha=0.3, linestyle='--', linewidth=0.8, color='#bdc3c7')
 ax.set_xlim(0.8, 5.2)
 
-# Modern, clean borders
+# Clean borders
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.spines['bottom'].set_color('#bdc3c7')
@@ -335,7 +335,7 @@ ax.spines['left'].set_color('#bdc3c7')
 ax.spines['bottom'].set_linewidth(1.2)
 ax.spines['left'].set_linewidth(1.2)
 
-# Add subtle background color
+# Add subtle background colour
 ax.set_facecolor('#f8f9fa')
 
 plt.tight_layout()
@@ -345,9 +345,9 @@ plt.show()
 plt.rcParams.update(plt.rcParamsDefault)
 ```
 
-### Interactive: Extra Learning Methods
+### Interactive: Other Learning Methods
 
-The table below shows additional learning methods mentioned by respondents in their free-text responses. Use the language toggle to switch between original and English translations.
+The table below shows other learning methods that respondents mentioned in their answers. Use the language toggle to switch between original and English translations.
 
 ```{python}
 #| echo: false

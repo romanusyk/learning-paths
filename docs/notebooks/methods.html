@@ -155,6 +155,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Learning Methods</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/correlations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Correlations</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -183,8 +189,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This page gives an overview the learning methods included to the survey. Our respondents rated the effectiveness and engagement of each of them on a scale of 1 to 5. Additionally, we asked them to mention additional learning methods they use.</p>
-<div id="91085343" class="cell" data-execution_count="1">
+<p>This page shows the learning methods we asked about in the survey. Respondents rated how effective and engaging they found each method on a scale of 1 to 5. We also asked them to share any other learning methods they use.</p>
+<div id="d9ea6b9c" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -233,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="method-effectiveness" class="level2">
 <h2 class="anchored" data-anchor-id="method-effectiveness">Method Effectiveness</h2>
-<p>This chart shows how our respondents assessed the effectiveness of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the effectiveness of these methods:</p>
+<p>This chart shows how respondents rated the effectiveness of each learning method. For each method, you can see how many people gave each rating (on a 1-5 scale). The methods are:</p>
 <ul>
 <li><strong>Online Courses</strong>: Structured online learning programs and platforms</li>
 <li><strong>Private Lessons</strong>: One-on-one tutoring with individual instructors<br>
@@ -245,14 +251,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Reading Books</strong>: Literature, articles, and other written content in English</li>
 <li><strong>Work Tasks</strong>: Learning English through professional activities and job requirements</li>
 </ul>
-<div id="4f17fd6f" class="cell" data-execution_count="2">
+<div id="2cb71a97" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create combined effectiveness distribution visualization</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define colors for each rating (1-5)</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create effectiveness distribution chart</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define colours for each rating (1-5)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>rating_colors <span class="op">=</span> {<span class="dv">1</span>: <span class="st">'#FF4B4B'</span>, <span class="dv">2</span>: <span class="st">'#FF8C42'</span>, <span class="dv">3</span>: <span class="st">'#FFD23F'</span>, <span class="dv">4</span>: <span class="st">'#8FBC8F'</span>, <span class="dv">5</span>: <span class="st">'#32CD32'</span>}</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for all methods and calculate average effectiveness for sorting</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data and calculate average for sorting</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>method_data_eff <span class="op">=</span> []</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> effectiveness_cols:</span>
@@ -335,7 +341,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="method-engagement" class="level2">
 <h2 class="anchored" data-anchor-id="method-engagement">Method Engagement</h2>
-<p>This chart shows how our respondents assessed the engagement of each learning method. For each learning method, the popularity of each ratings (1-5 scale) is shown. Respondents rated the engagement of these methods:</p>
+<p>This chart shows how engaging respondents found each learning method. For each method, you can see how many people gave each rating (on a 1-5 scale). The methods are:</p>
 <ul>
 <li><strong>Online Exercises</strong>: Interactive digital activities and practice tasks</li>
 <li><strong>Speaking Club</strong>: Group conversation and discussion sessions<br>
@@ -346,11 +352,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Gamified Learning</strong>: Game-like learning experiences with rewards and progression</li>
 <li><strong>Personalised Feedback</strong>: Individual assessment and customized guidance</li>
 </ul>
-<div id="22acdafd" class="cell" data-execution_count="3">
+<div id="c7990331" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create combined engagement distribution visualization</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for all engagement methods and calculate average for sorting</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create engagement distribution chart</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data and calculate average for sorting</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>method_data_eng <span class="op">=</span> []</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> engagement_cols:</span>
@@ -431,14 +437,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="combined-effectiveness-vs-engagement" class="level2">
-<h2 class="anchored" data-anchor-id="combined-effectiveness-vs-engagement">Combined Effectiveness vs Engagement</h2>
-<p>Combining the assessment of the effectiveness and engagement of each method, this chart shows the average ratings for the methods, side by side:</p>
-<div id="d4dd807d" class="cell" data-execution_count="4">
+<section id="effectiveness-vs-engagement" class="level2">
+<h2 class="anchored" data-anchor-id="effectiveness-vs-engagement">Effectiveness vs Engagement</h2>
+<p>This chart compares the average effectiveness and engagement ratings for each method, shown side by side:</p>
+<div id="d605ca52" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate averages for methods that appear in both effectiveness and engagement</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Map similar methods between the two categories</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate averages for methods</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group similar methods together</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>all_methods <span class="op">=</span> {</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Speaking clubs'</span>: ([<span class="st">'method_effectiveness:speaking_club'</span>], [<span class="st">'motives:speaking_club'</span>]),</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Movies &amp; Music'</span>: ([<span class="st">'method_effectiveness:watching_movies'</span>, <span class="st">'method_effectiveness:audio'</span>], [<span class="st">'motives:watching_movies'</span>]),</span>
@@ -484,23 +490,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>effectiveness_scores <span class="op">=</span> [item[<span class="st">'effectiveness'</span>] <span class="cf">for</span> item <span class="kw">in</span> combined_method_data]</span>
 <span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>engagement_scores <span class="op">=</span> [item[<span class="st">'engagement'</span>] <span class="cf">for</span> item <span class="kw">in</span> combined_method_data]</span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Create horizontal side-by-side bar chart</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Create horizontal bar chart</span></span>
 <span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.arange(<span class="bu">len</span>(method_names))</span>
 <span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>height <span class="op">=</span> <span class="fl">0.28</span></span>
 <span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Set modern, friendly font</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Set clean font</span></span>
 <span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>plt.rcParams[<span class="st">'font.family'</span>] <span class="op">=</span> <span class="st">'sans-serif'</span></span>
 <span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>plt.rcParams[<span class="st">'font.sans-serif'</span>] <span class="op">=</span> [<span class="st">'Arial'</span>, <span class="st">'Helvetica'</span>, <span class="st">'DejaVu Sans'</span>]</span>
 <span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="dv">6</span>))</span>
 <span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Create horizontal bars with vibrant, friendly colors</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Create horizontal bars with clear colours</span></span>
 <span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>bars1 <span class="op">=</span> ax.barh(y <span class="op">+</span> height<span class="op">/</span><span class="dv">2</span>, effectiveness_scores, height, label<span class="op">=</span><span class="st">'Effectiveness'</span>, </span>
 <span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span><span class="st">'#3498db'</span>, alpha<span class="op">=</span><span class="fl">0.9</span>, edgecolor<span class="op">=</span><span class="st">'white'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
 <span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>bars2 <span class="op">=</span> ax.barh(y <span class="op">-</span> height<span class="op">/</span><span class="dv">2</span>, engagement_scores, height, label<span class="op">=</span><span class="st">'Engagement'</span>, </span>
 <span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span><span class="st">'#e74c3c'</span>, alpha<span class="op">=</span><span class="fl">0.9</span>, edgecolor<span class="op">=</span><span class="st">'white'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
 <span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Add value labels on bars with better styling</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Add value labels on bars</span></span>
 <span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (bar1, bar2) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(bars1, bars2)):</span>
 <span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> np.isnan(effectiveness_scores[i]):</span>
 <span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>        width1 <span class="op">=</span> bar1.get_width()</span>
@@ -514,14 +520,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f'</span><span class="sc">{</span>engagement_scores[i]<span class="sc">:.1f}</span><span class="ss">'</span>, ha<span class="op">=</span><span class="st">'left'</span>, va<span class="op">=</span><span class="st">'center'</span>, </span>
 <span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>                fontsize<span class="op">=</span><span class="dv">11</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#2c3e50'</span>)</span>
 <span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Modern, accessible styling</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Clear styling</span></span>
 <span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Rating (1 = Poor, 5 = Excellent)'</span>, fontsize<span class="op">=</span><span class="dv">13</span>, fontweight<span class="op">=</span><span class="st">'600'</span>, color<span class="op">=</span><span class="st">'#2c3e50'</span>)</span>
 <span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Which Learning Methods Work Best?'</span>, </span>
 <span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>             fontweight<span class="op">=</span><span class="st">'bold'</span>, fontsize<span class="op">=</span><span class="dv">16</span>, color<span class="op">=</span><span class="st">'#2c3e50'</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
 <span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>ax.set_yticks(y)</span>
 <span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(method_names, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'500'</span>, color<span class="op">=</span><span class="st">'#34495e'</span>)</span>
 <span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean, modern styling</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean styling</span></span>
 <span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>ax.set_xticks([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
 <span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels([<span class="st">'1'</span>, <span class="st">'2'</span>, <span class="st">'3'</span>, <span class="st">'4'</span>, <span class="st">'5'</span>], fontsize<span class="op">=</span><span class="dv">11</span>, color<span class="op">=</span><span class="st">'#7f8c8d'</span>)</span>
 <span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>ax.legend(fontsize<span class="op">=</span><span class="dv">12</span>, loc<span class="op">=</span><span class="st">'upper right'</span>, frameon<span class="op">=</span><span class="va">True</span>, fancybox<span class="op">=</span><span class="va">True</span>, </span>
@@ -529,7 +535,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>ax.grid(axis<span class="op">=</span><span class="st">'x'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, color<span class="op">=</span><span class="st">'#bdc3c7'</span>)</span>
 <span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="fl">0.8</span>, <span class="fl">5.2</span>)</span>
 <span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Modern, clean borders</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean borders</span></span>
 <span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'top'</span>].set_visible(<span class="va">False</span>)</span>
 <span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'right'</span>].set_visible(<span class="va">False</span>)</span>
 <span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'bottom'</span>].set_color(<span class="st">'#bdc3c7'</span>)</span>
@@ -537,7 +543,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'bottom'</span>].set_linewidth(<span class="fl">1.2</span>)</span>
 <span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'left'</span>].set_linewidth(<span class="fl">1.2</span>)</span>
 <span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Add subtle background color</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Add subtle background colour</span></span>
 <span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>ax.set_facecolor(<span class="st">'#f8f9fa'</span>)</span>
 <span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
@@ -554,10 +560,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="interactive-extra-learning-methods" class="level3">
-<h3 class="anchored" data-anchor-id="interactive-extra-learning-methods">Interactive: Extra Learning Methods</h3>
-<p>The table below shows additional learning methods mentioned by respondents in their free-text responses. Use the language toggle to switch between original and English translations.</p>
-<div id="2fce9584" class="cell" data-results="asis" data-execution_count="5">
+<section id="interactive-other-learning-methods" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-other-learning-methods">Interactive: Other Learning Methods</h3>
+<p>The table below shows other learning methods that respondents mentioned in their answers. Use the language toggle to switch between original and English translations.</p>
+<div id="dc398efa" class="cell" data-results="asis" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <style>
         .lang-toggle-btn { 

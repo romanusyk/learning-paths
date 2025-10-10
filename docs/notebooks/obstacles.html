@@ -155,6 +155,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Learning Methods</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/correlations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Correlations</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -183,9 +189,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This page analyzes responses to the survey question: <em>“Have you ever stopped learning English? If so, what were the main obstacles?”</em></p>
-<p>The free-text responses were analyzed and labeled by an LLM (Large Language Model) to identify common obstacle categories.</p>
-<div id="9e0140fe" class="cell" data-execution_count="1">
+<p>This page analyses responses to the survey question: <em>“Have you ever stopped learning English? If so, what were the main obstacles?”</em></p>
+<p>The free-text responses were analysed and labelled by an LLM (Large Language Model) to identify common obstacle categories.</p>
+<div id="d6d403d6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -198,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'../data/obstacles_map.json'</span>, <span class="st">'r'</span>, encoding<span class="op">=</span><span class="st">'utf-8'</span>) <span class="im">as</span> f:</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    mapping <span class="op">=</span> json.load(f)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Build frequency of labels</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how often each label appears</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>label_counts <span class="op">=</span> Counter()</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> mapping:</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> row.get(<span class="st">'labels'</span>, []):</span>
@@ -240,10 +246,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="obstacles-by-popularity" class="level3">
-<h3 class="anchored" data-anchor-id="obstacles-by-popularity">Obstacles by popularity</h3>
-<p>The chart below ranks obstacles by the number of respondents who mentioned them. Each obstacle category represents a cluster of similar responses identified by the LLM analysis.</p>
-<div id="87099f65" class="cell" data-execution_count="2">
+<section id="most-common-obstacles" class="level3">
+<h3 class="anchored" data-anchor-id="most-common-obstacles">Most Common Obstacles</h3>
+<p>The chart below shows obstacles ranked by how many respondents mentioned them. Each obstacle category groups similar responses identified by the LLM.</p>
+<div id="0f9e6f92" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -267,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="c616e93c" class="cell" data-execution_count="3">
+<div id="f57c1670" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the ordered table with explanations (show full text, no truncation, no index column)</span></span>
@@ -280,7 +286,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>]</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>table_df <span class="op">=</span> pd.DataFrame(rows)</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The table below shows each obstacle category with its frequency and a detailed explanation generated by the LLM based on the common themes found in respondent answers."</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The table below shows each obstacle with how many respondents mentioned it, plus a detailed explanation of common themes in their answers."</span>)</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pd.option_context(<span class="st">'display.max_colwidth'</span>, <span class="va">None</span>):</span>
@@ -288,7 +294,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    display(HTML(html))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>The table below shows each obstacle category with its frequency and a detailed explanation generated by the LLM based on the common themes found in respondent answers.
+<pre><code>The table below shows each obstacle with how many respondents mentioned it, plus a detailed explanation of common themes in their answers.
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -341,10 +347,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="interactive-all-examples-with-english-translations" class="level3">
-<h3 class="anchored" data-anchor-id="interactive-all-examples-with-english-translations">Interactive: All examples with English translations</h3>
-<p>The table below lists every respondent’s free-text obstacle answer alongside the set of mapped obstacles (labels). Use the buttons to filter by obstacle label and toggle between original and English text.</p>
-<div id="eeb876ee" class="cell" data-results="asis" data-execution_count="4">
+<section id="interactive-all-responses-with-english-translations" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-all-responses-with-english-translations">Interactive: All Responses with English Translations</h3>
+<p>The table below shows every respondent’s answer about obstacles, together with the obstacle labels assigned to it. Use the buttons to filter by obstacle and switch between original and English text.</p>
+<div id="ecf3f6bf" class="cell" data-results="asis" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <style>
   .tag-filter-btn { cursor: pointer; margin: 0 6px 6px 0; padding: 6px 10px; border-radius: 18px; background: #eee; border: 1px solid #ddd; }
