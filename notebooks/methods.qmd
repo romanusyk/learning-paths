@@ -1,5 +1,5 @@
 ---
-title: "Learning Methods Analysis"
+title: "The Method Trap: Why One Size Doesn't Fit All"
 format:
   html:
     toc: false
@@ -8,7 +8,11 @@ format:
     page-layout: full
 ---
 
-This page shows the learning methods we asked about in the survey. Respondents rated how effective and engaging they found each method on a scale of 1 to 5. We also asked them to share any other learning methods they use.
+> "I wish I had never chosen this method." — *Survey Respondent*
+
+Finding an effective learning strategy is often a process of trial and error. Our survey reveals that **one in three respondents** found at least one popular method to be "completely useless."
+
+This page analyses the effectiveness and engagement of various learning methods, from private lessons to speaking clubs, to help you find what might work for you.
 
 ```{python}
 import pandas as pd

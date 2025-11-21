@@ -6,3 +6,6 @@ old_src/
 
 /.quarto/
 .env
+.idea/
+*.quarto_ipynb
+

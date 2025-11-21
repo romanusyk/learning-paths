@@ -5,8 +5,14 @@ project:
     - index.qmd
     - notebooks/*
 
+format:
+  html:
+    css: styles.css
+    theme: cosmo
+
 website:
   title: "Learning Paths materials"
+  search: false
   sidebar:
     style: "docked"
     contents:
@@ -16,3 +22,5 @@ website:
         text: Learning Methods
       - href: notebooks/correlations.qmd
         text: Correlations
+      - href: notebooks/data_exploration.qmd
+        text: Data Exploration

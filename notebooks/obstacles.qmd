@@ -1,5 +1,5 @@
 ---
-title: "Obstacles to Learning English"
+title: "The Plateau: Why We Stop Learning"
 format:
   html:
     toc: false
@@ -8,9 +8,11 @@ format:
     page-layout: full
 ---
 
-This page analyses responses to the survey question: *"Have you ever stopped learning English? If so, what were the main obstacles?"*
+> "I stopped because I was foolish." — *Survey Respondent*
 
-The free-text responses were analysed and labelled by an LLM (Large Language Model) to identify common obstacle categories.
+According to our survey, **44 out of 102 respondents** stopped learning English at least once. While taking a break is common, extensive research confirms that long pauses lead to "language attrition"—where skills, especially vocabulary, decline over time.
+
+This page explores the main obstacles that cause these pauses, from the "lack of need" to the lasting impact of poor teaching in school.
 
 ```{python}
 import pandas as pd
@@ -77,6 +79,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+The table below shows each obstacle with how many respondents mentioned it, plus a detailed explanation of common themes in their answers.
+
 ```{python}
 # Display the ordered table with explanations (show full text, no truncation, no index column)
 from IPython.display import display, HTML
@@ -87,9 +91,6 @@ rows = [
     for name, cnt in ranked
 ]
 table_df = pd.DataFrame(rows)
-
-print("The table below shows each obstacle with how many respondents mentioned it, plus a detailed explanation of common themes in their answers.")
-print()
 
 with pd.option_context('display.max_colwidth', None):
     html = table_df.to_html(index=False)

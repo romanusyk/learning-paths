@@ -1,5 +1,5 @@
 ---
-title: "Learning Paths materials"
+title: "Learning Paths"
 format:
   html:
     toc: false
@@ -7,19 +7,38 @@ format:
 page-layout: full
 ---
 
-## Welcome
+# Turning the Uphill Battle into a Lifelong Journey
 
-This site presents analysis and materials about learning English for IT professionals.
+For many IT specialists, learning English begins as a necessity—an uphill battle to keep pace with the industry. But what happens when the immediate career goals are met? Progress often plateaus, and the motivation fades.
 
-### Highlights
+This project explores the **Learning Paths** of Ukrainian IT professionals. Through a detailed survey, we uncover not just *how* we learn, but *why* we continue to learn. We examine the obstacles that stop us, the methods that fail us, and the intrinsic curiosity that turns a chore into a passion.
 
-- Explore whether respondents have ever paused learning English: [Obstacles](notebooks/obstacles.qmd)
-- View how effective and engaging respondents found different learning methods: [Learning Methods](notebooks/methods.qmd)
-- Analyse motivation types and correlations between learning attitudes: [Correlations](notebooks/correlations.qmd)
+### Explore the Research
 
-### How to reproduce
+::: {.grid}
 
-You can rebuild the data and pages locally:
+::: {.g-col-12 .g-col-md-4}
+### [The Plateau](notebooks/obstacles.qmd)
+Why do we stop learning? Explore the common obstacles, from "lack of need" to the lasting impact of poor teaching in school.
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### [The Method Trap](notebooks/methods.qmd)
+One size doesn't fit all. See which learning methods respondents found effective, engaging, or completely useless.
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### [Twin Peaks of Motivation](notebooks/correlations.qmd)
+Career vs. Culture. Analyse how different types of motivation correlate with learning success and satisfaction.
+:::
+
+:::
+
+---
+
+### Reproducibility
+
+This research is built on transparency. You can explore the raw data and reproduce the analysis yourself:
 
 ```bash
 uv run --python 3.12 python -m src.scripts.preprocess

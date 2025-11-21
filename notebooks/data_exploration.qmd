@@ -1,0 +1,29 @@
+---
+title: "Data Exploration"
+format:
+  html:
+    toc: false
+    number-sections: false
+    code-fold: true
+    page-layout: full
+---
+
+This page allows you to explore the raw data from the survey. It shows the original responses along with the English translations and assigned labels for obstacles.
+
+```{python}
+#| echo: false
+#| results: asis
+import sys, os
+from IPython.display import HTML, display
+sys.path.append(os.path.abspath('..'))
+from src.ui.data_tables.exploration_table import render_exploration_table
+
+html_block = render_exploration_table(
+    table_id='exploration-table',
+    form_csv='../data/form_data.csv',
+    obstacles_eng_csv='../data/obstacles_eng.csv',
+    extra_methods_eng_csv='../data/extra_methods_eng.csv',
+    map_json='../data/obstacles_map.json',
+)
+display(HTML(html_block))
+```

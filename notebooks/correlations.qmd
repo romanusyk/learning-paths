@@ -1,5 +1,5 @@
 ---
-title: "Motivation and Correlation Analysis"
+title: "The Twin Peaks: Purpose and Passion"
 format:
   html:
     toc: false
@@ -8,7 +8,11 @@ format:
     page-layout: full
 ---
 
-This page analyses how different variables in our survey relate to each other. We look at motivation types (integrative vs instrumental), learning methods, and general attitudes towards English learning.
+> "Learning English would never seem pointless if I had looked beyond my career goals." — *Survey Respondent*
+
+Researchers distinguish between two primary forms of motivation: **Instrumental** (career-oriented) and **Integrative** (cultural). While career goals often spark the journey, our data suggests that genuine cultural curiosity is what sustains it.
+
+This page analyses how these different motivations correlate with learning success, satisfaction, and the choice of methods.
 
 ```{python}
 import pandas as pd
@@ -16,6 +20,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import spearmanr
+from matplotlib.patches import Patch, Rectangle
+
+# Set modern font family for all charts
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans', 'sans-serif']
 
 # Load data
 df = pd.read_csv('../data/form_data.csv')
@@ -51,34 +60,125 @@ integrative_col_names = [
 df['instrumental'] = df[instrumental_col_names].mean(axis=1)
 df['integrative'] = df[integrative_col_names].mean(axis=1)
 
-# Create boxplot to visualise distribution
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+# Calculate average scores
+avg_instrumental = df['instrumental'].mean()
+avg_integrative = df['integrative'].mean()
+
+# Create simple comparison bar chart with professional styling
+fig, ax = plt.subplots(figsize=(7, 5))
+
+motivation_types = ['Instrumental', 'Integrative']
+averages = [avg_instrumental, avg_integrative]
+# Place bars closer together by using custom x positions
+x_positions = np.array([2.2, 3.8])
+colors = ['#e76f62', '#2ca06c']  # Muted coral and green
+ax.set_xlim(0, 6)
+# Slightly narrower bars, closer together
+bars = ax.bar(x_positions, averages, color=colors, width=0.7, zorder=3)
+
+# Round the bar corners and add subtle edge for definition
+for bar in bars:
+    bar.set_capstyle('round')
+    bar.set_edgecolor('white')
+    bar.set_linewidth(0.8)
+
+# Add value labels on top of bars
+for bar, avg in zip(bars, averages):
+    height = bar.get_height()
+    ax.annotate(f'{avg:.2f}',
+                xy=(bar.get_x() + bar.get_width() / 2, height),
+                xytext=(0, 6),
+                textcoords="offset points",
+                ha='center', va='bottom', 
+                fontsize=16, fontweight='600', color='#333')
+
+# Styling
+ax.set_ylabel('Average Score (1-5 scale)', fontsize=16, labelpad=30, color='#333')
+ax.set_title('Motivation Strength Amongst Respondents', fontsize=16, fontweight='bold', pad=10, color='#333')
+ax.set_xticks(x_positions)
+ax.set_xticklabels(motivation_types)
+ax.set_ylim(0, 5.5)
+ax.set_yticks([1, 2, 3, 4, 5])
+
+# Minimalist axes and grid (match other charts)
+ax.yaxis.grid(True, linestyle='--', alpha=0.25, color='#999', zorder=1)
+ax.set_axisbelow(True)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.spines['bottom'].set_color('grey')
+ax.spines['bottom'].set_linewidth(0.5)
+
+# Baseline at zero
+ax.axhline(y=0, color='black', linewidth=1.0)
+
+# Tick styling
+ax.tick_params(axis='y', labelsize=14, colors='#333', length=0, pad=10)
+ax.tick_params(axis='x', labelsize=16, colors='#333', length=0, pad=10)
+ax.margins(x=0.12)
+
+# Background
+ax.set_facecolor('white')
+fig.patch.set_facecolor('white')
+
+fig.tight_layout(pad=1.5)
+plt.show()
+
+print(f"Average Instrumental Motivation: {avg_instrumental:.2f}")
+print(f"Average Integrative Motivation: {avg_integrative:.2f}")
+```
+
+For those interested in the detailed distribution, here's a more detailed view:
+
+```{python}
+# Create boxplot to visualise distribution with professional styling
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 
 # Instrumental motivation boxplot
 bp1 = ax1.boxplot([df['instrumental'].dropna()], 
                    tick_labels=['Instrumental'],
                    patch_artist=True,
                    widths=0.5)
-bp1['boxes'][0].set_facecolor('#e74c3c')
-bp1['boxes'][0].set_alpha(0.7)
-ax1.set_ylabel('Motivation Score (1-5)', fontsize=12, fontweight='600')
-ax1.set_title('Instrumental Motivation Distribution', fontsize=14, fontweight='bold')
+bp1['boxes'][0].set_facecolor('#e76f62')
+bp1['boxes'][0].set_alpha(0.8)
+for element in ['whiskers', 'fliers', 'means', 'medians', 'caps']:
+    plt.setp(bp1[element], color='#333')
+ax1.set_ylabel('Motivation Score (1-5)', fontsize=13, labelpad=10, color='dimgray')
+ax1.set_title('Instrumental Motivation Distribution', fontsize=16, fontweight='bold', pad=15, color='#333')
 ax1.set_ylim(0.5, 5.5)
-ax1.grid(axis='y', alpha=0.3)
+ax1.yaxis.grid(True, linestyle='--', alpha=0.5, color='grey')
+ax1.set_axisbelow(True)
+ax1.spines['top'].set_visible(False)
+ax1.spines['right'].set_visible(False)
+ax1.spines['left'].set_visible(False)
+ax1.spines['bottom'].set_color('grey')
+ax1.spines['bottom'].set_linewidth(0.5)
+ax1.tick_params(axis='y', labelsize=11, colors='grey', length=0)
+ax1.tick_params(axis='x', labelsize=13, colors='#333', length=0)
 
 # Integrative motivation boxplot
 bp2 = ax2.boxplot([df['integrative'].dropna()], 
                    tick_labels=['Integrative'],
                    patch_artist=True,
                    widths=0.5)
-bp2['boxes'][0].set_facecolor('#3498db')
-bp2['boxes'][0].set_alpha(0.7)
-ax2.set_ylabel('Motivation Score (1-5)', fontsize=12, fontweight='600')
-ax2.set_title('Integrative Motivation Distribution', fontsize=14, fontweight='bold')
+bp2['boxes'][0].set_facecolor('#2ca06c')
+bp2['boxes'][0].set_alpha(0.8)
+for element in ['whiskers', 'fliers', 'means', 'medians', 'caps']:
+    plt.setp(bp2[element], color='#333')
+ax2.set_ylabel('Motivation Score (1-5)', fontsize=13, labelpad=10, color='dimgray')
+ax2.set_title('Integrative Motivation Distribution', fontsize=16, fontweight='bold', pad=15, color='#333')
 ax2.set_ylim(0.5, 5.5)
-ax2.grid(axis='y', alpha=0.3)
+ax2.yaxis.grid(True, linestyle='--', alpha=0.5, color='grey')
+ax2.set_axisbelow(True)
+ax2.spines['top'].set_visible(False)
+ax2.spines['right'].set_visible(False)
+ax2.spines['left'].set_visible(False)
+ax2.spines['bottom'].set_color('grey')
+ax2.spines['bottom'].set_linewidth(0.5)
+ax2.tick_params(axis='y', labelsize=11, colors='grey', length=0)
+ax2.tick_params(axis='x', labelsize=13, colors='#333', length=0)
 
-plt.tight_layout()
+fig.tight_layout(pad=2.0)
 plt.show()
 ```
 
@@ -115,28 +215,33 @@ for b in bins:
 # Sort index and columns, then reverse index to flip y-axis (5 at top, 1 at bottom)
 heatmap_data = heatmap_data.sort_index(ascending=False).sort_index(axis=1)
 
-# Create the heatmap
-plt.figure(figsize=(12, 9))
+# Create the heatmap with professional styling
+fig, ax = plt.subplots(figsize=(12, 9))
 sns.heatmap(
     heatmap_data, 
     annot=True, 
     fmt='g',
     cmap='YlOrRd',
     cbar_kws={'label': 'Number of Respondents', 'pad': 0.02},
-    linewidths=0.5,
-    linecolor='gray',
-    annot_kws={'fontsize': 10}
+    linewidths=1,
+    linecolor='white',
+    annot_kws={'fontsize': 11, 'color': '#333'},
+    ax=ax
 )
 
-plt.xlabel('Integrative Motivation', fontsize=14, fontweight='bold', labelpad=10)
-plt.ylabel('Instrumental Motivation', fontsize=14, fontweight='bold', labelpad=10)
-plt.title('Distribution of Respondents by Motivation Type', fontsize=16, fontweight='bold', pad=20)
+ax.set_xlabel('Integrative Motivation', fontsize=14, labelpad=10, color='dimgray')
+ax.set_ylabel('Instrumental Motivation', fontsize=14, labelpad=10, color='dimgray')
+ax.set_title('Distribution of Respondents by Motivation Type', fontsize=18, fontweight='bold', pad=20, color='#333')
 
 # Adjust tick labels
-ax = plt.gca()
-ax.tick_params(axis='both', which='major', labelsize=11)
+ax.tick_params(axis='both', which='major', labelsize=11, colors='dimgray', length=0)
 
-plt.tight_layout()
+# Remove spines
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+fig.patch.set_facecolor('white')
+fig.tight_layout(pad=2.0)
 plt.show()
 
 # Print summary statistics
@@ -273,27 +378,37 @@ def clean_label(col_name):
 # Apply labels
 clean_labels1 = [clean_label(col) for col in cols_matrix1]
 
-# Plot correlation matrix
+# Plot correlation matrix with professional styling
 fig, ax = plt.subplots(figsize=(20, 18))
 sns.heatmap(
     corr_matrix1, 
     annot=True, 
     cmap='coolwarm',
     fmt=".2f", 
-    linewidths=0.5,
-    annot_kws={'size': 9},
+    linewidths=1,
+    linecolor='white',
+    annot_kws={'size': 9, 'color': '#333'},
     center=0,
     vmin=-1,
     vmax=1,
     xticklabels=clean_labels1,
-    yticklabels=clean_labels1
+    yticklabels=clean_labels1,
+    cbar_kws={'shrink': 0.8},
+    ax=ax
 )
 
-plt.title('Matrix 1: Skill Levels & General Attitudes', 
-          fontsize=20, fontweight='bold', pad=20)
-plt.xticks(rotation=45, ha='right', fontsize=11)
-plt.yticks(rotation=0, fontsize=11)
-plt.tight_layout()
+ax.set_title('Matrix 1: Skill Levels & General Attitudes', 
+             fontsize=20, fontweight='bold', pad=20, color='#333')
+ax.tick_params(axis='x', rotation=45, labelsize=11, colors='dimgray', length=0)
+ax.tick_params(axis='y', rotation=0, labelsize=11, colors='dimgray', length=0)
+plt.setp(ax.get_xticklabels(), ha='right')
+
+# Remove spines
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+fig.patch.set_facecolor('white')
+fig.tight_layout(pad=2.0)
 plt.show()
 
 ```
@@ -377,27 +492,37 @@ corr_matrix2 = df[cols_matrix2].corr(method='spearman')
 # Apply labels
 clean_labels2 = [clean_label(col) for col in cols_matrix2]
 
-# Plot correlation matrix
+# Plot correlation matrix with professional styling
 fig, ax = plt.subplots(figsize=(24, 20))
 sns.heatmap(
     corr_matrix2, 
     annot=True, 
     cmap='coolwarm',
     fmt=".2f", 
-    linewidths=0.5,
-    annot_kws={'size': 8},
+    linewidths=1,
+    linecolor='white',
+    annot_kws={'size': 8, 'color': '#333'},
     center=0,
     vmin=-1,
     vmax=1,
     xticklabels=clean_labels2,
-    yticklabels=clean_labels2
+    yticklabels=clean_labels2,
+    cbar_kws={'shrink': 0.8},
+    ax=ax
 )
 
-plt.title('Matrix 2: Method Effectiveness, Skill Levels & General Attitudes', 
-          fontsize=20, fontweight='bold', pad=20)
-plt.xticks(rotation=45, ha='right', fontsize=10)
-plt.yticks(rotation=0, fontsize=10)
-plt.tight_layout()
+ax.set_title('Matrix 2: Method Effectiveness, Skill Levels & General Attitudes', 
+             fontsize=20, fontweight='bold', pad=20, color='#333')
+ax.tick_params(axis='x', rotation=45, labelsize=10, colors='dimgray', length=0)
+ax.tick_params(axis='y', rotation=0, labelsize=10, colors='dimgray', length=0)
+plt.setp(ax.get_xticklabels(), ha='right')
+
+# Remove spines
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+fig.patch.set_facecolor('white')
+fig.tight_layout(pad=2.0)
 plt.show()
 
 ```
@@ -475,27 +600,37 @@ corr_matrix3 = df[cols_matrix3].corr(method='spearman')
 # Apply labels
 clean_labels3 = [clean_label(col) for col in cols_matrix3]
 
-# Plot correlation matrix
+# Plot correlation matrix with professional styling
 fig, ax = plt.subplots(figsize=(22, 18))
 sns.heatmap(
     corr_matrix3, 
     annot=True, 
     cmap='coolwarm',
     fmt=".2f", 
-    linewidths=0.5,
-    annot_kws={'size': 8},
+    linewidths=1,
+    linecolor='white',
+    annot_kws={'size': 8, 'color': '#333'},
     center=0,
     vmin=-1,
     vmax=1,
     xticklabels=clean_labels3,
-    yticklabels=clean_labels3
+    yticklabels=clean_labels3,
+    cbar_kws={'shrink': 0.8},
+    ax=ax
 )
 
-plt.title('Matrix 3: Motivation/Engagement, Skill Levels & General Attitudes', 
-          fontsize=20, fontweight='bold', pad=20)
-plt.xticks(rotation=45, ha='right', fontsize=10)
-plt.yticks(rotation=0, fontsize=10)
-plt.tight_layout()
+ax.set_title('Matrix 3: Motivation/Engagement, Skill Levels & General Attitudes', 
+             fontsize=20, fontweight='bold', pad=20, color='#333')
+ax.tick_params(axis='x', rotation=45, labelsize=10, colors='dimgray', length=0)
+ax.tick_params(axis='y', rotation=0, labelsize=10, colors='dimgray', length=0)
+plt.setp(ax.get_xticklabels(), ha='right')
+
+# Remove spines
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+fig.patch.set_facecolor('white')
+fig.tight_layout(pad=2.0)
 plt.show()
 
 ```
@@ -558,27 +693,37 @@ corr_matrix4 = df[cols_matrix4].corr(method='spearman')
 # Apply labels
 clean_labels4 = [clean_label(col) for col in cols_matrix4]
 
-# Plot correlation matrix
+# Plot correlation matrix with professional styling
 fig, ax = plt.subplots(figsize=(20, 18))
 sns.heatmap(
     corr_matrix4, 
     annot=True, 
     cmap='coolwarm',
     fmt=".2f", 
-    linewidths=0.5,
-    annot_kws={'size': 9},
+    linewidths=1,
+    linecolor='white',
+    annot_kws={'size': 9, 'color': '#333'},
     center=0,
     vmin=-1,
     vmax=1,
     xticklabels=clean_labels4,
-    yticklabels=clean_labels4
+    yticklabels=clean_labels4,
+    cbar_kws={'shrink': 0.8},
+    ax=ax
 )
 
-plt.title('Matrix 4: Motivation Types, Skill Levels & General Attitudes', 
-          fontsize=20, fontweight='bold', pad=20)
-plt.xticks(rotation=45, ha='right', fontsize=10)
-plt.yticks(rotation=0, fontsize=10)
-plt.tight_layout()
+ax.set_title('Matrix 4: Motivation Types, Skill Levels & General Attitudes', 
+             fontsize=20, fontweight='bold', pad=20, color='#333')
+ax.tick_params(axis='x', rotation=45, labelsize=10, colors='dimgray', length=0)
+ax.tick_params(axis='y', rotation=0, labelsize=10, colors='dimgray', length=0)
+plt.setp(ax.get_xticklabels(), ha='right')
+
+# Remove spines
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+fig.patch.set_facecolor('white')
+fig.tight_layout(pad=2.0)
 plt.show()
 
 ```
@@ -732,3 +877,296 @@ display(Markdown('\n'.join(diff_lines)))
 ```
 
 For example, variables that relate more strongly to **integrative motivation** (like enjoying learning or cultural curiosity) show that inner interest drives this type. Variables that relate more strongly to **instrumental motivation** (like career necessity or documentation needs) show its practical, goal-focused nature.
+
+## Motivation Type Comparison: Key Attitudes
+
+This chart compares how specific attitudes correlate with each motivation type, revealing their distinct patterns.
+
+```{python}
+#| echo: false
+import numpy as np
+
+# Select key variables to compare with descriptive labels
+comparison_vars = [
+    ('learning_is_fun', 'Learning is fun'),
+    ('want_to_improve', 'Determined to keep learning'),
+    ('english_is_not_applicable', 'My skills are impractical'),
+    ('learning_is_exhausting', 'Learning is exhausting')
+]
+
+# Extract correlation values and convert to percentages
+var_names = [name for _, name in comparison_vars]
+integrative_corrs_list = [integrative_corrs[var] * 100 for var, _ in comparison_vars]
+instrumental_corrs_list = [instrumental_corrs[var] * 100 for var, _ in comparison_vars]
+
+# Create horizontal grouped bar chart with professional styling
+y_pos = np.arange(len(var_names)) * 1.3  # Increase spacing between groups
+height = 0.3  # Bar height to match label height
+
+# Two-panel layout: left for labels (no axes), right for bars
+fig, (ax_lbl, ax) = plt.subplots(
+    1, 2, figsize=(9, 4.5), sharey=True,
+    gridspec_kw={'width_ratios': [0.40, 0.60], 'wspace': 0}
+)
+
+# More muted colors - bars without overlap
+bars1 = ax.barh(y_pos - height * 0.5, instrumental_corrs_list, height, 
+                label='Instrumental', color='#d17066', zorder=3)
+bars2 = ax.barh(y_pos + height * 0.5, integrative_corrs_list, height, 
+                label='Integrative', color='#52a37f', zorder=3)
+
+# Round the corners
+for bar in bars1 + bars2:
+    bar.set_capstyle('round')
+    # Add slight edge for definition
+    bar.set_edgecolor('white')
+    bar.set_linewidth(0.5)
+
+# Add value labels with dynamic sizing based on bar length
+def add_labels_dynamic(bars):
+    for bar in bars:
+        width_val = bar.get_width()
+        abs_width = abs(width_val)
+        
+        # Dynamic font size based on bar size - more consistent with other text
+        if abs_width > 50:
+            fontsize = 14
+        elif abs_width > 30:
+            fontsize = 13
+        elif abs_width > 15:
+            fontsize = 12
+        else:
+            fontsize = 11
+        
+        label_x = width_val + 2 if width_val > 0 else width_val - 2
+        ha = 'left' if width_val > 0 else 'right'
+        
+        ax.annotate(f'{width_val:.0f}%',
+                    xy=(label_x, bar.get_y() + bar.get_height() / 2),
+                    xytext=(0, 0),
+                    textcoords="offset points",
+                    ha=ha, va='center', 
+                    fontsize=fontsize, fontweight='600', color='#333')
+
+add_labels_dynamic(bars1)
+add_labels_dynamic(bars2)
+
+# Styling with more consistent font sizes
+ax.set_xlabel('Correlation (%)', fontsize=14, labelpad=12, color='#333', fontweight='500')
+ax.set_yticks(y_pos)
+ax.set_yticklabels([])
+ax.tick_params(axis='x', labelsize=12, colors='#333', length=0)
+ax.tick_params(axis='y', length=0)
+
+# Render left-aligned labels in a dedicated label axis
+ax_lbl.set_xlim(0, 1)
+ax_lbl.set_ylim(min(y_pos) - 0.8, max(y_pos) + 0.8)
+ax_lbl.axis('off')
+for yi, label in zip(y_pos, var_names):
+    ax_lbl.text(0.02, yi, label, ha='left', va='center', fontsize=13, color='#333')
+
+# Adjust margins for proper spacing
+ax.margins(y=0.12)
+
+# Add background bands to connect labels to bars across both axes
+for i, y in enumerate(y_pos):
+    ax.axhspan(y - height * 1.5, y + height * 1.5,
+               xmin=0.0, xmax=1.0, facecolor='#ebebeb', alpha=1.0,
+               zorder=0, clip_on=False)
+    ax_lbl.axhspan(y - height * 1.5, y + height * 1.5,
+                   xmin=0.0, xmax=1.0, facecolor='#ebebeb', alpha=1.0,
+                   zorder=0, clip_on=False)
+
+# Stronger zero axis and subtler grid
+ax.axvline(x=0, color='#222', linewidth=2, zorder=2)
+ax.xaxis.grid(True, linestyle='--', alpha=0.25, color='#999', zorder=1)
+ax.set_axisbelow(True)
+
+# Remove spines
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.spines['bottom'].set_color('#999')
+ax.spines['bottom'].set_linewidth(0.5)
+
+# Set x-axis limits with padding and remove edge gridlines
+x_min = min(min(instrumental_corrs_list), min(integrative_corrs_list)) - 15
+x_max = max(max(instrumental_corrs_list), max(integrative_corrs_list)) + 15
+ax.set_xlim(x_min + 5, x_max + 5)
+
+# Legend
+legend_elements = [
+    Patch(facecolor='#d17066', label='Instrumental'),
+    Patch(facecolor='#52a37f', label='Integrative')
+]
+ax.legend(handles=legend_elements, fontsize=12, loc='upper right', 
+          frameon=True, edgecolor='lightgray')
+
+# Background
+ax.set_facecolor('white')
+ax_lbl.set_facecolor('white')
+fig.patch.set_facecolor('white')
+
+# Centered title across entire figure
+fig.suptitle('How Opinions Relate to Motivation Types', fontsize=18, fontweight='bold', y=0.98, color='#333')
+
+plt.show()
+```
+
+## Learning Enjoyment vs Exhaustion
+
+This chart shows how different attitudes and skills correlate with finding learning fun versus finding it exhausting.
+
+```{python}
+#| echo: false
+
+# Define variables to compare with descriptive labels - in reversed order
+comparison_vars_2 = [
+    ('felt_pressure', 'Felt pressure to learn English'),
+    ('i_know_all_i_need', 'My current English level meets all my needs'),
+    ('enjoyed_school_classes', 'English lessons in school were enjoyable'),
+    ('glad_to_feel_progress', 'Feel happy when making progress'),
+    ('want_to_improve', 'Determined to keep learning English'),
+]
+
+# Get correlations for learning_is_fun and learning_is_exhausting
+fun_corrs = df[['learning_is_fun'] + [var for var, _ in comparison_vars_2]].corr(method='spearman')['learning_is_fun'].drop('learning_is_fun')
+exhausting_corrs = df[['learning_is_exhausting'] + [var for var, _ in comparison_vars_2]].corr(method='spearman')['learning_is_exhausting'].drop('learning_is_exhausting')
+
+# Calculate average correlation with level columns
+level_col_names_chart = ['level:reading', 'level:writing', 'level:listening', 'level:speaking']
+fun_level_corrs = df[['learning_is_fun'] + level_col_names_chart].corr(method='spearman')['learning_is_fun'].drop('learning_is_fun')
+exhausting_level_corrs = df[['learning_is_exhausting'] + level_col_names_chart].corr(method='spearman')['learning_is_exhausting'].drop('learning_is_exhausting')
+
+avg_fun_level = fun_level_corrs.mean()
+avg_exhausting_level = exhausting_level_corrs.mean()
+
+# Prepare data for plotting (convert to percentages) - add Average skill level at position 2 (after know enough)
+var_names_2 = [name for _, name in comparison_vars_2[:2]] + ['I feel confident in my English skills'] + [name for _, name in comparison_vars_2[2:]]
+fun_values = [fun_corrs[var] * 100 for var, _ in comparison_vars_2[:2]] + [avg_fun_level * 100] + [fun_corrs[var] * 100 for var, _ in comparison_vars_2[2:]]
+exhausting_values = [exhausting_corrs[var] * 100 for var, _ in comparison_vars_2[:2]] + [avg_exhausting_level * 100] + [exhausting_corrs[var] * 100 for var, _ in comparison_vars_2[2:]]
+
+# Create horizontal grouped bar chart with professional styling
+y_pos_2 = np.arange(len(var_names_2)) * 1.3  # Increase spacing between groups
+height_2 = 0.3  # Bar height to match label height
+
+# Two-panel layout: left for labels, right for bars
+fig, (ax_lbl, ax) = plt.subplots(
+    1, 2, figsize=(12, 6), sharey=True,
+    gridspec_kw={'width_ratios': [0.45, 0.55], 'wspace': 0}
+)
+
+# More muted colors - bars without overlap
+bars1 = ax.barh(y_pos_2 - height_2 * 0.5, fun_values, height_2, 
+                label='Learning is fun', color='#52a37f', zorder=3)
+bars2 = ax.barh(y_pos_2 + height_2 * 0.5, exhausting_values, height_2, 
+                label='Learning is exhausting', color='#d17066', zorder=3)
+
+# Round the corners
+for bar in bars1 + bars2:
+    bar.set_capstyle('round')
+    # Add slight edge for definition
+    bar.set_edgecolor('white')
+    bar.set_linewidth(0.5)
+
+# Add value labels with dynamic sizing based on bar length
+def add_labels_dynamic_2(bars):
+    for bar in bars:
+        width_val = bar.get_width()
+        abs_width = abs(width_val)
+        
+        # Dynamic font size based on bar size - more consistent with other text
+        if abs_width > 50:
+            fontsize = 14
+        elif abs_width > 35:
+            fontsize = 13
+        elif abs_width > 20:
+            fontsize = 12
+        elif abs_width > 10:
+            fontsize = 11
+        else:
+            fontsize = 10
+        
+        label_x = width_val + 2 if width_val > 0 else width_val - 2
+        ha = 'left' if width_val > 0 else 'right'
+        
+        ax.annotate(f'{width_val:.0f}%',
+                    xy=(label_x, bar.get_y() + bar.get_height() / 2),
+                    xytext=(0, 0),
+                    textcoords="offset points",
+                    ha=ha, va='center', 
+                    fontsize=fontsize, fontweight='600', color='#333')
+
+add_labels_dynamic_2(bars1)
+add_labels_dynamic_2(bars2)
+
+# Styling with more consistent font sizes
+ax.set_xlabel('Correlation (%)', fontsize=14, labelpad=12, color='#333', fontweight='500')
+ax.set_yticks(y_pos_2)
+ax.set_yticklabels([])
+ax.tick_params(axis='x', labelsize=12, colors='#333', length=0)
+ax.tick_params(axis='y', length=0)
+
+# Render left-aligned labels in dedicated axis
+ax_lbl.set_xlim(0, 1)
+ax_lbl.set_ylim(min(y_pos_2) - 0.8, max(y_pos_2) + 0.8)
+ax_lbl.axis('off')
+for yi, label in zip(y_pos_2, var_names_2):
+    ax_lbl.text(0.02, yi, label, ha='left', va='center', fontsize=13, color='#333')
+
+# Adjust margins for proper spacing
+ax.margins(y=0.10)
+
+# Add background bands across both axes
+for i, y in enumerate(y_pos_2):
+    ax.axhspan(y - height_2 * 1.5, y + height_2 * 1.5,
+               xmin=0.0, xmax=1.0, facecolor='#ebebeb', alpha=1.0,
+               zorder=0, clip_on=False)
+    ax_lbl.axhspan(y - height_2 * 1.5, y + height_2 * 1.5,
+                   xmin=0.0, xmax=1.0, facecolor='#ebebeb', alpha=1.0,
+                   zorder=0, clip_on=False)
+
+# Stronger zero axis and subtler grid
+ax.axvline(x=0, color='#222', linewidth=2, zorder=2)
+ax.xaxis.grid(True, linestyle='--', alpha=0.25, color='#999', zorder=1)
+ax.set_axisbelow(True)
+
+# Remove spines
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.spines['bottom'].set_color('#999')
+ax.spines['bottom'].set_linewidth(0.5)
+
+# Set x-axis limits with padding and remove edge gridlines
+x_min_2 = min(min(fun_values), min(exhausting_values)) - 15
+x_max_2 = max(max(fun_values), max(exhausting_values)) + 15
+ax.set_xlim(x_min_2 + 5, x_max_2 + 5)
+
+# Legend
+legend_elements = [
+    Patch(facecolor='#52a37f', label='Fun'),
+    Patch(facecolor='#d17066', label='Exhausting')
+]
+ax.legend(
+    title='Learning is ...',
+    title_fontsize=12,
+    handles=legend_elements,
+    fontsize=12,
+    loc='lower right',
+    # bbox_to_anchor=(0.5, -0.10),
+    # ncol=2,
+    frameon=True,
+    edgecolor='lightgray'
+)
+
+# Background
+ax.set_facecolor('white')
+ax_lbl.set_facecolor('white')
+fig.patch.set_facecolor('white')
+
+# Centered title across entire figure
+fig.suptitle('How Opinions Relate to Learning Perceptions', fontsize=18, fontweight='bold', y=0.98, color='#333')
+
+plt.show()
+```
