@@ -7,9 +7,9 @@ format:
 page-layout: full
 ---
 
-# Turning the Uphill Battle into a Lifelong Journey
+# Turning the Uphill Struggle into the Lifelong Journey
 
-For many IT specialists, learning English begins as a necessity—an uphill battle to keep pace with the industry. But what happens when the immediate career goals are met? Progress often plateaus, and the motivation fades.
+For many IT specialists, learning English begins as a necessity—an uphill struggle to keep pace with the industry. But what happens when the immediate career goals are met? Progress often plateaus, and the motivation fades.
 
 This project explores the **Learning Paths** of Ukrainian IT professionals. Through a detailed survey, we uncover not just *how* we learn, but *why* we continue to learn. We examine the obstacles that stop us, the methods that fail us, and the intrinsic curiosity that turns a chore into a passion.
 
