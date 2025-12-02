@@ -70,7 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-7b1b06e26e1e2798ccde3208f86b5bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2757cfadcc89ddbfb9e61569f8c3689f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -91,10 +91,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Learning Paths materials</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/romanusyk/learning-paths"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text">romanusyk/learning-paths</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -107,14 +130,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Learning Paths materials</a> 
-    </div>
-      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -174,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 <p>Researchers distinguish between two primary forms of motivation: <strong>Instrumental</strong> (career-oriented) and <strong>Integrative</strong> (cultural). While career goals often spark the journey, our data suggests that genuine cultural curiosity is what sustains it.</p>
 <p>This page analyses how these different motivations correlate with learning success, satisfaction, and the choice of methods.</p>
-<div id="f5be4922" class="cell" data-execution_count="1">
+<div id="56f52673" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -204,7 +222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Integrative Motivation</strong>: Learning English for personal enrichment, cultural understanding, and connection with English-speaking people</li>
 <li><strong>Instrumental Motivation</strong>: Learning English for practical purposes such as career advancement and professional requirements</li>
 </ul>
-<div id="1aff41e0" class="cell" data-execution_count="2">
+<div id="089959a8" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the columns for each motivation type</span></span>
@@ -307,7 +325,7 @@ Average Integrative Motivation: 3.40</code></pre>
 </div>
 </div>
 <p>For those interested in the detailed distribution, here’s a more detailed view:</p>
-<div id="0654188e" class="cell" data-execution_count="3">
+<div id="4edeb8df" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot to visualise distribution with professional styling</span></span>
@@ -372,7 +390,7 @@ Average Integrative Motivation: 3.40</code></pre>
 <section id="motivation-distribution-heatmap" class="level2">
 <h2 class="anchored" data-anchor-id="motivation-distribution-heatmap">Motivation Distribution Heatmap</h2>
 <p>This heatmap shows how respondents are distributed across the two types of motivation. Each cell shows how many respondents have that combination of integrative (x-axis) and instrumental (y-axis) motivation scores.</p>
-<div id="43261d70" class="cell" data-execution_count="4">
+<div id="8d67527a" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create bins for the heatmap with 0.5 increments</span></span>
@@ -491,7 +509,7 @@ Respondents with this profile: 12</code></pre>
 <li><code>curious_about_english_culture</code> - Interested in learning about culture of English-speaking countries</li>
 <li><code>curious_about_english_system</code> - Interested in why English is structured with its particular rules</li>
 </ul>
-<div id="cb74f79a" class="cell" data-execution_count="5">
+<div id="2b50d057" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define column groups</span></span>
@@ -626,7 +644,7 @@ Respondents with this profile: 12</code></pre>
 <section id="notable-correlations-in-matrix-1" class="level3">
 <h3 class="anchored" data-anchor-id="notable-correlations-in-matrix-1">Notable Correlations in Matrix 1</h3>
 <p><strong>Interesting Positive Correlations:</strong></p>
-<div id="62dbdfc5" class="cell" data-execution_count="6">
+<div id="5b8e8e33" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -672,7 +690,7 @@ Respondents with this profile: 12</code></pre>
 </div>
 </div>
 <p><strong>Interesting Negative Correlations:</strong></p>
-<div id="d0aecbc8" class="cell" data-execution_count="7">
+<div id="ef1c082a" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -722,7 +740,7 @@ Respondents with this profile: 12</code></pre>
 <li><code>method_effectiveness:reading_books</code> - Reading English books and articles</li>
 <li><code>method_effectiveness:work_tasks</code> - Using English at work (e.g., business correspondence and meetings)</li>
 </ul>
-<div id="801c36ab" class="cell" data-execution_count="8">
+<div id="907cb754" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>method_effectiveness_col_names <span class="op">=</span> [</span>
@@ -790,7 +808,7 @@ Respondents with this profile: 12</code></pre>
 <section id="notable-correlations-in-matrix-2" class="level3">
 <h3 class="anchored" data-anchor-id="notable-correlations-in-matrix-2">Notable Correlations in Matrix 2</h3>
 <p><strong>Interesting Positive Correlations (involving Method Effectiveness):</strong></p>
-<div id="613a8f18" class="cell" data-execution_count="9">
+<div id="df54a797" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -831,7 +849,7 @@ Respondents with this profile: 12</code></pre>
 </div>
 </div>
 <p><strong>Interesting Negative Correlations (involving Method Effectiveness):</strong></p>
-<div id="326b99fc" class="cell" data-execution_count="10">
+<div id="b49baeb0" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -880,7 +898,7 @@ Respondents with this profile: 12</code></pre>
 <li><code>motives:gamified_learning</code> - Learning in game format</li>
 <li><code>motives:personalised_feedback</code> - Personalised feedback from a teacher</li>
 </ul>
-<div id="6a07aa2d" class="cell" data-execution_count="11">
+<div id="1ca73b66" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>motives_col_names <span class="op">=</span> [</span>
@@ -947,7 +965,7 @@ Respondents with this profile: 12</code></pre>
 <section id="notable-correlations-in-matrix-3" class="level3">
 <h3 class="anchored" data-anchor-id="notable-correlations-in-matrix-3">Notable Correlations in Matrix 3</h3>
 <p><strong>Interesting Positive Correlations (involving Motivation/Engagement):</strong></p>
-<div id="6a1e942b" class="cell" data-execution_count="12">
+<div id="e98c0a82" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -983,7 +1001,7 @@ Respondents with this profile: 12</code></pre>
 </div>
 </div>
 <p><strong>Interesting Negative Correlations (involving Motivation/Engagement):</strong></p>
-<div id="0d57bf17" class="cell" data-execution_count="13">
+<div id="7cbdda5d" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -1022,7 +1040,7 @@ Respondents with this profile: 12</code></pre>
 <li><code>integrative</code> - Average of: curious about English-speaking colleagues, valuing original movies, valuing original books, curious about English-speaking culture, curious about English language structure</li>
 <li><code>instrumental</code> - Average of: perfection is key to career, need English for work docs, speaking is key to career, must learn English</li>
 </ul>
-<div id="e824bd0b" class="cell" data-execution_count="14">
+<div id="3a676e4d" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine columns for matrix 4</span></span>
@@ -1079,7 +1097,7 @@ Respondents with this profile: 12</code></pre>
 <section id="notable-correlations-in-matrix-4" class="level3">
 <h3 class="anchored" data-anchor-id="notable-correlations-in-matrix-4">Notable Correlations in Matrix 4</h3>
 <p><strong>Interesting Positive Correlations (involving Motivation Types):</strong></p>
-<div id="4301a61e" class="cell" data-execution_count="15">
+<div id="75fffe58" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -1120,7 +1138,7 @@ Respondents with this profile: 12</code></pre>
 </div>
 </div>
 <p><strong>Interesting Negative Correlations (involving Motivation Types):</strong></p>
-<div id="a0478f4b" class="cell" data-execution_count="16">
+<div id="711edfc6" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -1162,7 +1180,7 @@ Respondents with this profile: 12</code></pre>
 <section id="integrative-motivation-strongest-associations" class="level3">
 <h3 class="anchored" data-anchor-id="integrative-motivation-strongest-associations">Integrative Motivation: Strongest Associations</h3>
 <p>People with strong <strong>integrative motivation</strong> (learning English for cultural understanding and personal enrichment) tend to rate the following aspects of English learning more positively:</p>
-<div id="6bf7cf20" class="cell" data-execution_count="18">
+<div id="47ae7b04" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -1205,7 +1223,7 @@ Respondents with this profile: 12</code></pre>
 <section id="instrumental-motivation-strongest-associations" class="level3">
 <h3 class="anchored" data-anchor-id="instrumental-motivation-strongest-associations">Instrumental Motivation: Strongest Associations</h3>
 <p>People with strong <strong>instrumental motivation</strong> (learning English for career and practical purposes) tend to rate the following aspects more highly:</p>
-<div id="2f2070b9" class="cell" data-execution_count="19">
+<div id="46655d5b" class="cell" data-execution_count="19">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -1248,7 +1266,7 @@ Respondents with this profile: 12</code></pre>
 <section id="differential-correlations-what-distinguishes-the-two-motivation-types" class="level3">
 <h3 class="anchored" data-anchor-id="differential-correlations-what-distinguishes-the-two-motivation-types">Differential Correlations: What Distinguishes the Two Motivation Types?</h3>
 <p>The following variables show the <strong>largest differences</strong> in how they relate to integrative versus instrumental motivation. These help us understand what truly separates the two types beyond how we defined them. Variables that relate much more strongly to one type than the other reveal the unique patterns of attitudes for each motivation type.</p>
-<div id="fdae54c3" class="cell" data-execution_count="20">
+<div id="e02d6f77" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
@@ -1327,7 +1345,7 @@ Respondents with this profile: 12</code></pre>
 <section id="motivation-type-comparison-key-attitudes" class="level2">
 <h2 class="anchored" data-anchor-id="motivation-type-comparison-key-attitudes">Motivation Type Comparison: Key Attitudes</h2>
 <p>This chart compares how specific attitudes correlate with each motivation type, revealing their distinct patterns.</p>
-<div id="62ed67d3" class="cell" data-execution_count="21">
+<div id="e93fb14c" class="cell" data-execution_count="21">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1340,7 +1358,7 @@ Respondents with this profile: 12</code></pre>
 <section id="learning-enjoyment-vs-exhaustion" class="level2">
 <h2 class="anchored" data-anchor-id="learning-enjoyment-vs-exhaustion">Learning Enjoyment vs Exhaustion</h2>
 <p>This chart shows how different attitudes and skills correlate with finding learning fun versus finding it exhausting.</p>
-<div id="bcc1c618" class="cell" data-execution_count="22">
+<div id="d1cd7d78" class="cell" data-execution_count="22">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1354,6 +1372,34 @@ Respondents with this profile: 12</code></pre>
 </section>
 
 </main> <!-- /main -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const repo = 'romanusyk/learning-paths';
+        const githubIcon = document.querySelector('.navbar-nav .bi-github');
+
+        if (githubIcon) {
+            const li = githubIcon.closest('li');
+
+            fetch(`https://api.github.com/repos/${repo}`)
+                .then(response => response.json())
+                .then(data => {
+                    const stars = data.stargazers_count;
+                    if (stars !== undefined) {
+                        const newLi = document.createElement('li');
+                        newLi.className = 'nav-item';
+                        // Format number with commas if needed, though usually small for personal repos
+                        const formattedStars = stars.toLocaleString();
+                        newLi.innerHTML = `<a class="nav-link" href="https://github.com/${repo}/stargazers" target="_blank" style="display: flex; align-items: center; gap: 5px;">
+            <i class="bi bi-star"></i>
+            <span>${formattedStars}</span>
+          </a>`;
+                        li.parentNode.insertBefore(newLi, li.nextSibling);
+                    }
+                })
+                .catch(err => console.error('Error fetching GitHub stars:', err));
+        }
+    });
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

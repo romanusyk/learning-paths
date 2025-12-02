@@ -1,0 +1,28 @@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const repo = 'romanusyk/learning-paths';
+        const githubIcon = document.querySelector('.navbar-nav .bi-github');
+
+        if (githubIcon) {
+            const li = githubIcon.closest('li');
+
+            fetch(`https://api.github.com/repos/${repo}`)
+                .then(response => response.json())
+                .then(data => {
+                    const stars = data.stargazers_count;
+                    if (stars !== undefined) {
+                        const newLi = document.createElement('li');
+                        newLi.className = 'nav-item';
+                        // Format number with commas if needed, though usually small for personal repos
+                        const formattedStars = stars.toLocaleString();
+                        newLi.innerHTML = `<a class="nav-link" href="https://github.com/${repo}/stargazers" target="_blank" style="display: flex; align-items: center; gap: 5px;">
+            <i class="bi bi-star"></i>
+            <span>${formattedStars}</span>
+          </a>`;
+                        li.parentNode.insertBefore(newLi, li.nextSibling);
+                    }
+                })
+                .catch(err => console.error('Error fetching GitHub stars:', err));
+        }
+    });
+</script>

@@ -9,10 +9,16 @@ format:
   html:
     css: styles.css
     theme: cosmo
+    include-after-body: _includes/github-button.html
 
 website:
   title: "Learning Paths materials"
   search: false
+  navbar:
+    right:
+      - icon: github
+        text: romanusyk/learning-paths
+        href: https://github.com/romanusyk/learning-paths
   sidebar:
     style: "docked"
     contents:
