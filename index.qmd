@@ -36,6 +36,13 @@ Career vs. Culture. Analyse how different types of motivation correlate with lea
 
 ---
 
+### The Article Series
+
+This website provides the source data, code, and visualisations for the Learning Paths article series:
+
+*   [Part I: The Uphill Struggle](https://medium.com/@romanysik/learning-paths-part-i-the-uphill-struggle-1c59cb769d19)
+*   [Part II: Finding Your Stride](https://medium.com/@romanysik/learning-paths-part-ii-finding-your-stride-d7bb86363f8e)
+
 ### Reproducibility
 
 This research is built on transparency. You can explore the raw data and reproduce the analysis yourself:
